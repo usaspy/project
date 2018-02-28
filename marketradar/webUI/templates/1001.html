@@ -1,0 +1,70 @@
+	{% extends "_refer_.html" %}
+	{% block body %}
+	<div id="page-container" class=" page-without-sidebar">
+		<!-- begin #content -->
+			<!-- begin page-header -->
+			<h1 class="page-header">温和放量 / Code=1001 <small></small></h1>
+			<!-- end page-header -->
+
+			<div class="panel panel-inverse">
+				<div class="alert alert-info fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是温和放量？</h4>
+								<p>
+									在过去<font color="red" size="4">15</font>个交易日内，每日的成交量相差不大，但最近<font color="red" size="4">3</font>个交易日 [前天、昨天、今天] 的成交量逐渐放大，其中[前天]的成交量至少是之前12个交易日平均量的<font color="red" size="4">2</font>倍以上.
+								</p>
+				</div>
+			    <div class="panel-body">
+					<div class="col-md-5">
+						样本天数:<select class="form-control" id="_ybts">
+                                            <option value="10">10天</option>
+                                            <option selected value="15">15天</option>
+                                            <option  value="20">20天</option>
+                                        </select>
+						温和放量天数：	<select class="form-control" id="_fdts">
+                                            <option value="1">1天</option>
+                                            <option value="2">2天</option>
+                                            <option selected value="3">3天</option>
+                                        </select>
+						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+					</div>
+					<div class="col-md-7">
+						<h3 class="page-header">匹配结果</h3>
+						<table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>代码</th>
+                                        <th>名称</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+								{% for stock in  matchs %}
+                                    <tr>
+                                        <td>{{loop.index}}</td>
+                                        <td>{{stock.CODE}}</td>
+                                        <td>{{stock.NAME}}</td>
+                                        <td>操作</td>
+                                    </tr>
+                   		 		{% endfor %}
+                                </tbody>
+                            </table>
+					</div>
+			    </div>
+			</div>
+		</div>
+		<!-- end #content -->
+
+	<script>
+		function query() {
+            if (confirm("执行？")) {
+                ybts = document.getElementById("_ybts").value;
+                fdts = document.getElementById("_fdts").value;
+                window.location.href = "/1001.html?action=query&ybts=" + ybts + "&fdts=" + fdts;
+            }
+        }
+	</script>
+	{% endblock %}

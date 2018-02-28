@@ -1,0 +1,99 @@
+	{% extends "_refer_.html" %}
+	{% block body %}
+	<div id="page-container" class=" page-without-sidebar">
+		<!-- begin #content -->
+			<!-- begin page-header -->
+			<h1 class="page-header">同步交易数据 <small>分三个步骤同步每日的交易数据</small></h1>
+			<!-- end page-header -->
+
+			<div class="panel panel-inverse">
+			    <div class="panel-heading">
+			        <h4 class="panel-title">开始同步</h4>
+			    </div>
+			    <div class="panel-body">
+			        <p>
+			            1）同步股票代码表-LISTs&nbsp;&nbsp;&nbsp;
+						<button type="button" onclick="sync_lists()" class="btn btn-danger m-r-5 m-b-5">开始同步</button>&nbsp;&nbsp;
+						共<strong>{{ lists_count }}</strong>支
+			        </p>
+					<p>
+			            2）每天下午3点收盘后同步当日股票交易数据-DAY_DATAs&nbsp;&nbsp;&nbsp;
+					<div class="col-md-4">
+						<input type="text" class="form-control" id="_theday" placeholder="Select Date" value="04/01/2018">
+					</div>
+						<button type="button" onclick="sync_day_datas()" class="btn btn-danger m-r-5 m-b-5">开始导入</button>
+			        </p>
+					<p>
+			            3）未采集成功的股票有<strong>{{session_failed_codes| length }}</strong>支，如下：
+					<div class="col-md-4">
+							<table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>代码</th>
+                                        <th>名称</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+								 {% for stock in  session_failed_codes %}
+                                    <tr>
+                                        <td>{{loop.index}}</td>
+                                        <td>{{stock.CODE}}</td>
+                                        <td>{{stock.NAME}}</td>
+                                    </tr>
+                   		 		{% endfor %}
+                                </tbody>
+                            </table>
+					</div>
+						是否再导入一次?
+					<div class="col-md-4">
+						<input type="text" class="form-control" id="_theday2" placeholder="Select Date" value="04/01/2018">
+					</div>
+						<button type="button" onclick="retry_sync()" class="btn btn-danger m-r-5 m-b-5">导入</button>
+			        </p>
+					<p>
+			            4）生成当日的移动平均线-MA(5,10,20)&nbsp;&nbsp;&nbsp;
+						<div class="col-md-4">
+						<label><input type="checkbox" name="mincheck[]" checked value="bar" data-parsley-multiple="mincheck" data-parsley-id="7380"> MA5</label>
+						<label><input type="checkbox" name="mincheck[]" checked value="bar" data-parsley-multiple="mincheck" data-parsley-id="7380"> MA10</label>
+						<label><input type="checkbox" name="mincheck[]" checked value="bar" data-parsley-multiple="mincheck" data-parsley-id="7380"> MA20</label>
+						<input type="text" class="form-control" id="_theday3" placeholder="Select Date" value="04/01/2018">
+						</div>
+						<button type="button" onclick="generate_MA()" class="btn btn-danger m-r-5 m-b-5">生成</button>&nbsp;&nbsp;
+
+			        </p>
+			    </div>
+			</div>
+		</div>
+		<!-- end #content -->
+		{% if msg %}
+		<div class="alert alert-danger">{{msg}}</div>
+	    {% endif %}
+	<script>
+		function sync_lists() {
+            if (confirm("执行？")) {
+            	window.location.href = "/sync?action=generate_lists";
+            }
+		}
+
+		function sync_day_datas(){
+            if (confirm("执行？")) {
+                day = document.getElementById("_theday").value;
+                window.location.href = "/sync?action=generate_day_datas&day=" + day;
+            }
+		}
+
+		function retry_sync() {
+            if (confirm("执行？")) {
+                day = document.getElementById("_theday2").value;
+                window.location.href = "/sync?action=retry_sync&day=" + day;
+            }
+        }
+        function generate_MA() {
+            if (confirm("执行？")) {
+                day = document.getElementById("_theday3").value;
+                window.location.href = "/sync?action=generate_ma&day=" + day;
+            }
+        }
+	</script>
+	{% endblock %}
