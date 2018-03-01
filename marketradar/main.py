@@ -91,7 +91,7 @@ def _1001():
         fdts = int(request.values.get('fdts')) #放量天数
         ls = LISTS.query.all() #统计所有股票个数
 
-        tp = ThreadPool(30)  #30个线程处理
+        tp = ThreadPool(10)  #30个线程处理
         for stock in ls:
             thread = tp.get_thread()
             t = thread(target=filter_rule_1001, args=(stock, ybts, fdts, multiple, match_ls,(tp)))
@@ -109,7 +109,7 @@ def _1002():
         fdts = int(request.values.get('fdts')) #放量天数
         ls = LISTS.query.all() #统计所有股票个数
 
-        tp = ThreadPool(30)  #30个线程处理
+        tp = ThreadPool(10)  #30个线程处理
         for stock in ls:
             thread = tp.get_thread()
             t = thread(target=filter_rule_1002, args=(stock, ybts, fdts, multiple, match_ls,(tp)))

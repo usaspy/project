@@ -7,12 +7,13 @@ from marketradar.utils import dbpool
 from marketradar.module import analyzer_engine
 from marketradar.utils.threadpool import ThreadPool
 from marketradar.utils.Exception import FilterError
+from datetime import datetime
 
 engine = create_engine("mysql://%s:%s@%s/%s"% (conf.get('db','user'),conf.get('db','pass'),conf.get('db','host'),conf.get('db','database')))
 
 #获取指定股票一个时间段内的交易数据，由于股票可能会停牌，故不使用starttime—endtime，而使用days(交易天数)
 def __getStockDayDatasByPeriod(code,days):
-    sql = "select CODE,TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,VATURNOVER,TCAP,MCAP,MA5,MA10,MA20,DAY from DAY_DATAS where CODE=%s order by DAY desc limit %d" % (code, days)
+    sql = "select TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,MA5,MA10,MA20,DAY from DAY_DATAS where CODE=%s order by DAY desc limit %d" % (code, days)
     return pd.read_sql_query(sql,engine)
 
 #温和放量
