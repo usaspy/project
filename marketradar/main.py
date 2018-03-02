@@ -117,6 +117,23 @@ def _1002():
 
     return render_template('1002.html',matchs = match_ls)
 
+#[1003-极限缩量]
+@app.route('/1003.html',methods=['GET','POST'])
+def _1003():
+    match_ls = []
+    if request.values.get('action') == 'query':
+        jxslts = int(request.values.get('jxslts')) #极限缩量天数
+
+    return render_template('1003.html',matchs = match_ls)
+
+#定义一个过滤器600168->sh600168
+@app.template_filter('code_prefix')
+def code_prefix(code):
+    if code[0:2] == '00':
+        _code = "sz" + code
+    if code[0:2] == '60':
+        _code = "sh" + code
+    return _code
 
 if __name__ == '__main__':
     app.run(host=conf.get('web','host'), port=conf.get('web','port'), debug=False)
