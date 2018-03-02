@@ -47,7 +47,7 @@
                                         <td>{{loop.index}}</td>
                                         <td>{{stock.CODE}}</td>
                                         <td>{{stock.NAME}}</td>
-                                        <td><a href="#">Look</a></td>
+                                        <td><a href="#" onclick="javascript:window.open('http://image.sinajs.cn/newchart/daily/n/{{ stock.CODE | code_prefix }}.gif')">查看</a></td>
                                     </tr>
                    		 		{% endfor %}
                                 </tbody>
