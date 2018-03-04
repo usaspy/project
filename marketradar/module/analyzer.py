@@ -17,14 +17,14 @@ def __getStockDayDatasByPeriod(code,days):
     sql = "select TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,MA5,MA10,MA20,DAY from DAY_DATAS where CODE=%s order by DAY desc limit %d" % (code, days)
     return pd.read_sql_query(sql,engine)
 
-#获取指定股票一个时间段内的交易数据，由于股票可能会停牌，故不使用starttime—endtime，而使用days(交易天数)
+#获取市场上所有股票的日数据(系统默认最多保存近60日的交易记录)
 def __getAllDayDatas():
     sql = "select CODE,DAY,TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,MA5,MA10,MA20 from DAY_DATAS order by DAY desc"
     return pd.read_sql_query(sql,engine)
 
 __ALL_DAY_DATAS = __getAllDayDatas()
 
-#重要
+#很重要
 #从集合中切取指定股票的样本数据
 def __getData(code,ybts):
     # 从全市交易数据集合中切取指定股票的N天(ybts)的样本数据
@@ -42,7 +42,7 @@ def __getData(code,ybts):
 #温和放量
 def filter_rule_1001(stock,ybts,fdts,multiple,match_ls,*args):
     try:
-        df = __getStockDayDatasByPeriod(stock.CODE, int(ybts))
+        df = __getData(stock.CODE, int(ybts))
         if analyzer_engine.rule_1001(df, ybts, fdts, multiple):
             match_ls.append(stock)
     except Exception as e:
