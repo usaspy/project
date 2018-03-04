@@ -104,15 +104,14 @@ def _1001():
 def _1002():
     match_ls = []
     if request.values.get('action') == 'query':
-        multiple = 5  #默认放量倍数
-        ybts = int(request.values.get('ybts')) #样本天数
+        multiple = int(request.values.get('multiple')) #默认放量倍数
         fdts = int(request.values.get('fdts')) #放量天数
         ls = LISTS.query.all() #统计所有股票个数
 
         tp = ThreadPool(10)  #30个线程处理
         for stock in ls:
             thread = tp.get_thread()
-            t = thread(target=filter_rule_1002, args=(stock, ybts, fdts, multiple, match_ls,(tp)))
+            t = thread(target=filter_rule_1002, args=(stock, fdts, multiple, match_ls,(tp)))
             t.start()
 
     return render_template('1002.html',matchs = match_ls)
@@ -122,8 +121,14 @@ def _1002():
 def _1003():
     match_ls = []
     if request.values.get('action') == 'query':
-        jxslts = int(request.values.get('jxslts')) #极限缩量天数
+        cxslts = int(request.values.get('cxslts')) #缩量天数
+        ls = LISTS.query.all()  # 统计所有股票个数
 
+        tp = ThreadPool(10)  # 30个线程处理
+        for stock in ls:
+            thread = tp.get_thread()
+            t = thread(target=filter_rule_1003, args=(stock, cxslts, match_ls, (tp)))
+            t.start()
     return render_template('1003.html',matchs = match_ls)
 
 #定义一个过滤器600168->sh600168

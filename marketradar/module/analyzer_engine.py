@@ -1,7 +1,7 @@
 from marketradar.utils.Exception import FilterError
 
 #[温和放量]
-#检查步骤：
+#规则：
 #1.确定fdts放大天数
 #2.计算前一段时间（ybts-fdts）的成交量均量
 #3.放大天数内每日成交量超过前一日的成交量
@@ -24,11 +24,26 @@ def rule_1001(df, ybts, fdts, multiple):
     return True
 
 #[突放巨量]
-#检查步骤：
+#规则：
 #1.确定fdts放大天数
+#2.放大天数内每日成交量至少是放大前一日的multiple=7倍
+def rule_1002(df, fdts, multiple):
+    if df.iloc[:,0].size != (fdts + 1):
+        return False
+
+    series = df["VOTURNOVER"]
+    #step.2
+    for i in range(0,fdts):
+        if series[i]/series[fdts] < multiple:#放大天数内的每一天成交量都是巨量
+            return False
+    return True
+
+#[持续缩量]
+#规则：
+#1.
 #2.计算前一段时间（ybts-fdts）的成交量均量
 #3.放大天数内每日成交量至少是前期平均量的multiple=5倍
-def rule_1002(df, ybts, fdts, multiple):
+def rule_1003(df, ybts, fdts, multiple):
     if df.iloc[:,0].size != ybts:
         return False
 

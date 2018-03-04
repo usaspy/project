@@ -15,19 +15,15 @@
                             </button>
                             	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是突放巨量？</h4>
 								<p>
-									在过去<font color="red" size="4">15</font>个交易日内，每日的成交量相差不大，但最近<font color="red" size="4">3</font>个交易日 [前天、昨天、今天] 的成交突放巨量，每天成交量至少是之前12个交易日平均量的<font color="red" size="4">5</font>倍以上.
+									某日成交量突然放大，且是前一日成交量的N倍，此后连续几日都是巨量成交.
 								</p>
 						</div>
-						样本天数:<select class="form-control" id="_ybts">
-                                            <option value="10">10天</option>
-                                            <option selected value="15">15天</option>
-                                            <option  value="20">20天</option>
-                                        </select>
-						放量天数：	<select class="form-control" id="_fdts">
-                                            <option value="1">1天</option>
+						巨量天数：	<select class="form-control" id="_fdts">
+                                            <option selected value="1">1天</option>
                                             <option value="2">2天</option>
-                                            <option selected value="3">3天</option>
+                                            <option value="3">3天</option>
                                         </select>
+						放大倍数：	<input type="text" id="_multiple" class="form-control" value="7">
 						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 					</div>
 					<div class="col-md-7">
@@ -73,9 +69,9 @@
 	<script>
 		function query() {
             if (confirm("执行？")) {
-                ybts = document.getElementById("_ybts").value;
+                multiple = document.getElementById("_multiple").value;
                 fdts = document.getElementById("_fdts").value;
-                window.location.href = "/1002.html?action=query&ybts=" + ybts + "&fdts=" + fdts;
+                window.location.href = "/1002.html?action=query&multiple=" + multiple + "&fdts=" + fdts;
             }
         }
 	</script>

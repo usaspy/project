@@ -3,51 +3,61 @@
 	<div id="page-container" class=" page-without-sidebar">
 		<!-- begin #content -->
 			<!-- begin page-header -->
-			<h1 class="page-header">极限缩量 / Code=1003 <small></small></h1>
+			<h1 class="page-header">持续缩量 / Code=1003 <small></small></h1>
 			<!-- end page-header -->
 
 			<div class="panel panel-inverse">
-				<div class="alert alert-info fade in">
+			    <div class="panel-body">
+					<div class="col-md-5">
+						<div class="alert alert-info fade in">
                             <button type="button" class="close" data-dismiss="alert">
                                 <span aria-hidden="true">×</span>
                             </button>
-                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是极限缩量？</h4>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是持续缩量？</h4>
 								<p>
-									在过去一段时间内（至少<font color="red" size="4">10</font>个交易日），每日成交量差额在20%以内。
-									同时注意到，.有<font color="red" size="4">70%</font>概率，每日的成交量比前日要更低。股价则越走越低，可以视为极限缩量
+									在过去一段时间内成交稀少．成交量总体走势是逐日走低的。缩量天数越多，越符合持续缩量的标准
 								</p>
-				</div>
-			    <div class="panel-body">
-					<div class="col-md-5">
-						极限缩量天数：	<select class="form-control" id="_jxslts">
-                                            <option value="1">5天</option>
-                                            <option value="2">10天</option>
-                                            <option selected value="3">20天</option>
+						</div>
+						持续缩量天数：	<select class="form-control" id="_cxslts">
+                                            <option value="10">至少10天</option>
+                                            <option selected value="30">30天以上</option>
                                         </select>
 						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 					</div>
 					<div class="col-md-7">
 						<h3 class="page-header">匹配结果</h3>
-						<table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>代码</th>
-                                        <th>名称</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-								{% for stock in  matchs %}
-                                    <tr>
-                                        <td>{{loop.index}}</td>
-                                        <td>{{stock.CODE}}</td>
-                                        <td>{{stock.NAME}}</td>
-                                        <td><a href="#">Look</a></td>
-                                    </tr>
-                   		 		{% endfor %}
-                                </tbody>
-                            </table>
+
+						<div class="dataTables_scroll">
+							<div class="dataTables_scrollBody" style="overflow: auto; height: 320px; width: 100%;">
+								<table id="data-table" class="table table-striped table-bordered dataTable no-footer KeyTable" role="grid" aria-describedby="data-table_info" style="width: 100%;">
+									<thead>
+                                        <tr role="row" style="height: 0px;">
+											<th class="sorting_asc" aria-controls="data-table" rowspan="1" colspan="1" style="width: 10%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending"><div class="dataTables_sizing" >#</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 30%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Browser: activate to sort column ascending"><div class="dataTables_sizing" >代码</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 40%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Platform(s): activate to sort column ascending"><div class="dataTables_sizing" >名称</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 20%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="CSS grade: activate to sort column ascending"><div class="dataTables_sizing" ></div></th>
+										</tr>
+                                    </thead>
+
+                                    <tbody>
+									{% for stock in  matchs %}
+									 	{% if loop.length == 0 %}
+											<tr class="gradeA odd" role="row">
+												 <td class="sorting_1" colspan="4">没有数据</td>
+											</tr>
+									  	{% endif %}
+                                    	<tr class="gradeA odd" role="row">
+                                            <td class="sorting_1">{{loop.index}}</td>
+                                            <td>{{stock.CODE}}</td>
+                                            <td>{{stock.NAME}}</td>
+                                            <td><a href="#" onclick="javascript:window.open('http://image.sinajs.cn/newchart/daily/n/{{ stock.CODE | code_prefix }}.gif')">查看</a></td>
+                                        </tr>
+                   		 			{% endfor %}
+									</tbody>
+                                </table>
+							</div>
+						</div>
+
 					</div>
 			    </div>
 			</div>
@@ -57,9 +67,8 @@
 	<script>
 		function query() {
             if (confirm("执行？")) {
-                ybts = document.getElementById("_ybts").value;
-                fdts = document.getElementById("_fdts").value;
-                window.location.href = "/1002.html?action=query&ybts=" + ybts + "&fdts=" + fdts;
+                cxslts = document.getElementById("_cxslts").value;
+                window.location.href = "/1003.html?action=query&cxslts=" + cxslts;
             }
         }
 	</script>
