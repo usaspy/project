@@ -1,0 +1,81 @@
+	{% extends "_refer_.html" %}
+	{% block body %}
+	<div id="page-container" class=" page-without-sidebar">
+		<!-- begin #content -->
+			<!-- begin page-header -->
+			<h1 class="page-header">连续缩量后的首次放量 / Code=1003 <small></small></h1>
+			<!-- end page-header -->
+
+			<div class="panel panel-inverse">
+			    <div class="panel-body">
+					<div class="col-md-5">
+						<div class="alert alert-info fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是连续缩量后的首次放量？</h4>
+								<p>
+									此前（样本天数内）成交量持续低迷（若呈现典型的连续缩量形态更好）今日突然开始放量，成交量是前一日的至少<font color="red" size="4">3</font>倍，同时
+									今日成交量是样本天数内的交易均量的至少<font color="red" size="4">2</font>倍
+								</p>
+						</div>
+						样本天数：	<select class="form-control" id="_ybts">
+                                            <option value="10">10天</option>
+                                            <option selected value="30">30天</option>
+                                        </select>
+									<input type="checkbox" id="_cxsl" value="">放大前<font color="red" size="4">3</font>日的成交量满足持续缩量形态
+						<br/>
+						今日较昨日放大倍数：	<input type="text" id="_multiple" class="form-control" value="3">
+						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+					</div>
+					<div class="col-md-7">
+						<h3 class="page-header">匹配结果</h3>
+
+						<div class="dataTables_scroll">
+							<div class="dataTables_scrollBody" style="overflow: auto; height: 320px; width: 100%;">
+								<table id="data-table" class="table table-striped table-bordered dataTable no-footer KeyTable" role="grid" aria-describedby="data-table_info" style="width: 100%;">
+									<thead>
+                                        <tr role="row" style="height: 0px;">
+											<th class="sorting_asc" aria-controls="data-table" rowspan="1" colspan="1" style="width: 10%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending"><div class="dataTables_sizing" >#</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 30%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Browser: activate to sort column ascending"><div class="dataTables_sizing" >代码</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 40%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Platform(s): activate to sort column ascending"><div class="dataTables_sizing" >名称</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 20%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="CSS grade: activate to sort column ascending"><div class="dataTables_sizing" ></div></th>
+										</tr>
+                                    </thead>
+
+                                    <tbody>
+									{% for stock in  matchs %}
+									 	{% if loop.length == 0 %}
+											<tr class="gradeA odd" role="row">
+												 <td class="sorting_1" colspan="4">没有数据</td>
+											</tr>
+									  	{% endif %}
+                                    	<tr class="gradeA odd" role="row">
+                                            <td class="sorting_1">{{loop.index}}</td>
+                                            <td>{{stock.CODE}}</td>
+                                            <td>{{stock.NAME}}</td>
+                                            <td><a href="#" onclick="javascript:window.open('http://image.sinajs.cn/newchart/daily/n/{{ stock.CODE | code_prefix }}.gif')">查看</a></td>
+                                        </tr>
+                   		 			{% endfor %}
+									</tbody>
+                                </table>
+							</div>
+						</div>
+
+					</div>
+			    </div>
+			</div>
+		</div>
+		<!-- end #content -->
+
+	<script>
+		function query() {
+            if (confirm("执行？")) {
+                ybts = document.getElementById("_ybts").value;
+                multiple = document.getElementById("_multiple").value;
+				cxsl = document.getElementById("_cxsl").checked;
+                window.location.href = "/1003.html?action=query&ybts=" + ybts + "&multiple=" + multiple + "&cxsl=" + cxsl;
+            }
+        }
+	</script>
+	{% endblock %}
