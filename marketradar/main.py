@@ -6,6 +6,7 @@ from marketradar.config import conf
 from marketradar.module import analyzer
 from marketradar.module.analyzer import  filter_rule_1001
 from marketradar.module.analyzer import  filter_rule_1002
+from marketradar.module.analyzer import  filter_rule_1003
 from marketradar.module import collector
 from marketradar.utils.threadpool import ThreadPool
 from marketradar.utils import datetimeUtil
@@ -86,9 +87,9 @@ def sync():
 def _1001():
     match_ls = []
     if request.values.get('action') == 'query':
-        multiple = 2  #默认放量倍数
         ybts = int(request.values.get('ybts')) #样本天数
         fdts = int(request.values.get('fdts')) #放量天数
+        multiple = int(request.values.get('multiple')) #默认放量倍数
         ls = LISTS.query.all() #统计所有股票个数
 
         tp = ThreadPool(10)  #30个线程处理
@@ -121,13 +122,16 @@ def _1002():
 def _1003():
     match_ls = []
     if request.values.get('action') == 'query':
-        cxslts = int(request.values.get('cxslts')) #缩量天数
+        ybts = int(request.values.get('ybts')) #样本天数
+        multiple = int(request.values.get('multiple')) #放大倍数
+        cxsl = request.values.get('cxsl') #是否持续缩量
+
         ls = LISTS.query.all()  # 统计所有股票个数
 
         tp = ThreadPool(10)  # 30个线程处理
         for stock in ls:
             thread = tp.get_thread()
-            t = thread(target=filter_rule_1003, args=(stock, cxslts, match_ls, (tp)))
+            t = thread(target=filter_rule_1003, args=(stock, ybts,multiple,cxsl, match_ls, (tp)))
             t.start()
     return render_template('1003.html',matchs = match_ls)
 
