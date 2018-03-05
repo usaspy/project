@@ -65,11 +65,11 @@ def filter_rule_1002(stock,fdts,multiple,match_ls,*args):
         if args and isinstance(args[0], ThreadPool):  # 如果第一个参数是线程池，则执行添加新线程操作
             args[0].add_thread()
 
-#持续缩量
-def filter_rule_1003(stock,cxslts,match_ls,*args):
+#持续缩量后的首次放量
+def filter_rule_1003(stock,ybts,multiple,cxsl,match_ls,*args):
     try:
-        df = __getData(stock.CODE, int(cxslts))
-        if analyzer_engine.rule_1003(df, cxslts):
+        df = __getData(stock.CODE, int(ybts))
+        if analyzer_engine.rule_1003(df, ybts,multiple,cxsl):
             match_ls.append(stock)
     except Exception as e:
         logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))

@@ -40,18 +40,26 @@ def rule_1002(df, fdts, multiple):
 
 #[持续缩量]
 #规则：
-#1.
-#2.计算前一段时间（ybts-fdts）的成交量均量
-#3.放大天数内每日成交量至少是前期平均量的multiple=5倍
-def rule_1003(df, ybts, fdts, multiple):
+#1.计算前一段时间（ybts-1）的成交量均量
+#2.今日的成交量是昨日的multiple=3倍以上
+#3.今日的成交量是前期(ybts-1)成交均量的2倍以上
+#4.T-3,T-2,T-1,三日的成交量呈典型的持续缩量态势
+def rule_1003(df, ybts, multiple, cxsl='true'):
     if df.iloc[:,0].size != ybts:
         return False
 
     series = df["VOTURNOVER"]
     #step.2
-    avg_vol = series[fdts:].sum()/(ybts-fdts)
+    if series[0]/series[1] < multiple:
+        return False
+    #step.1
+    avg_vol = series[1:].sum()/(ybts-1)
     # step.3
-    for i in range(0,fdts):
-        if series[i]/avg_vol < multiple:#如果最近几天成交量没有持续放大，则不满足条件，返回False
-            return False
+    if series[0]/avg_vol < 2:
+        return False
+    # step.4
+    if cxsl == 'true':
+        for i in range(1, 4):
+            if series[i] > series[i+1]: #若没有持续缩量，则不满足条件
+                return False
     return True

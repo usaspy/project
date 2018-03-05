@@ -3,7 +3,7 @@
 	<div id="page-container" class=" page-without-sidebar">
 		<!-- begin #content -->
 			<!-- begin page-header -->
-			<h1 class="page-header">持续缩量 / Code=1003 <small></small></h1>
+			<h1 class="page-header">连续缩量后的首次放量 / Code=1003 <small></small></h1>
 			<!-- end page-header -->
 
 			<div class="panel panel-inverse">
@@ -13,15 +13,19 @@
                             <button type="button" class="close" data-dismiss="alert">
                                 <span aria-hidden="true">×</span>
                             </button>
-                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是持续缩量？</h4>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是连续缩量后的首次放量？</h4>
 								<p>
-									在过去一段时间内成交稀少．成交量总体走势是逐日走低的。缩量天数越多，越符合持续缩量的标准
+									此前（样本天数内）成交量持续低迷（若呈现典型的连续缩量形态更好）今日突然开始放量，成交量是前一日的至少<font color="red" size="4">3</font>倍，同时
+									今日成交量是样本天数内的交易均量的至少<font color="red" size="4">2</font>倍
 								</p>
 						</div>
-						持续缩量天数：	<select class="form-control" id="_cxslts">
-                                            <option value="10">至少10天</option>
-                                            <option selected value="30">30天以上</option>
+						样本天数：	<select class="form-control" id="_ybts">
+                                            <option value="10">10天</option>
+                                            <option selected value="30">30天</option>
                                         </select>
+									<input type="checkbox" id="_cxsl" value="">放大前<font color="red" size="4">3</font>日的成交量满足持续缩量形态
+						<br/>
+						今日较昨日放大倍数：	<input type="text" id="_multiple" class="form-control" value="3">
 						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 					</div>
 					<div class="col-md-7">
@@ -67,8 +71,10 @@
 	<script>
 		function query() {
             if (confirm("执行？")) {
-                cxslts = document.getElementById("_cxslts").value;
-                window.location.href = "/1003.html?action=query&cxslts=" + cxslts;
+                ybts = document.getElementById("_ybts").value;
+                multiple = document.getElementById("_multiple").value;
+				cxsl = document.getElementById("_cxsl").checked;
+                window.location.href = "/1003.html?action=query&ybts=" + ybts + "&multiple=" + multiple + "&cxsl=" + cxsl;
             }
         }
 	</script>

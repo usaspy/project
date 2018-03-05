@@ -15,7 +15,7 @@
                             </button>
                             	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是温和放量？</h4>
 								<p>
-									在过去<font color="red" size="4">15</font>个交易日内，每日成交都不温不火，但最近<font color="red" size="4">3</font>个交易日 [前天、昨天、今天] 的成交量出现连续增加，呈稳步放量.
+									在过去一段时间里（默认<font color="red" size="4">15</font>T）成交量总是不温不火，但最近成交量开始出现连续放大（至少<font color="red" size="4">2</font>倍以上），呈稳步放量态势。.
 								</p>
 				</div>
 						样本天数:<select class="form-control" id="_ybts">
@@ -27,6 +27,7 @@
                                             <option value="2">2天</option>
                                             <option selected value="3">3天</option>
                                         </select>
+						放大倍数：	<input type="text" id="_multiple" class="form-control" value="2">
 						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 					</div>
 					<div class="col-md-7">
@@ -74,7 +75,9 @@
             if (confirm("执行？")) {
                 ybts = document.getElementById("_ybts").value;
                 fdts = document.getElementById("_fdts").value;
-                window.location.href = "/1001.html?action=query&ybts=" + ybts + "&fdts=" + fdts;
+                multiple = document.getElementById("_multiple").value;
+
+                window.location.href = "/1001.html?action=query&ybts=" + ybts + "&fdts=" + fdts + "&multiple=" + multiple;
             }
         }
 	</script>
