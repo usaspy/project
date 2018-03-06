@@ -3,7 +3,7 @@
 	<div id="page-container" class=" page-without-sidebar">
 		<!-- begin #content -->
 			<!-- begin page-header -->
-			<h1 class="page-header">连续缩量后的首次放量 / Code=1003 <small></small></h1>
+			<h1 class="page-header">启明星 / Code=2001 <small></small></h1>
 			<!-- end page-header -->
 
 			<div class="panel panel-inverse">
@@ -13,20 +13,38 @@
                             <button type="button" class="close" data-dismiss="alert">
                                 <span aria-hidden="true">×</span>
                             </button>
-                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是连续缩量后的首次放量？</h4>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是启明星/十字启明星？</h4>
 								<p>
-									此前（样本天数内）成交量持续低迷（若呈现典型的连续缩量形态更好）今日突然开始放量，成交量是前一日的至少<font color="red" size="4">3</font>倍，同时
-									今日成交量是样本天数内的交易均量的至少<font color="red" size="4">2</font>倍
+									启明星/十字启明星是一种经典的反转形态,具有很强的参考意义.通常在一段下跌趋势之后出现.
+									<br/>
+									满足启明星的几个基本条件:<br>
+									1)行情经过多日的下跌，K2日出现十字星线（收/开盘价一致）<br>
+									2)K2相对K1的实体必须有向下跳空缺口（另外如果K3相对K2的实体也有向上跳空缺口则更佳）<br>
+									3)K1成交量较小，预示下跌势头已经趋缓，K3成交量放大<br>
+
+									<br>
+									<strong>提示:</strong> <br>
+										1)K2出现十字星时最好多等一日观察确认，如果K3继续下探，则十字启明星线不成立<br>
+										2)K3如果能扎入K1的实体内或者吞没K1实体则指标意义明显<br>
+										3)如果出现“弃婴”形态，则指标意义更明显（完全跳空：K2上影线与K1下影线之间没有重叠，K3下影线与K2上影线之间没有重叠）<br/>
 								</p>
 						</div>
-						样本天数：	<select class="form-control" id="_ybts">
-                                            <option value="10">10天</option>
-                                            <option selected value="30">30天</option>
-                                        </select>
-									<input type="checkbox" id="_cxsl" value="">放大前<font color="red" size="4">3</font>日的成交量满足持续缩量形态
-						<br/>
-						今日较昨日放大倍数：	<input type="text" id="_multiple" class="form-control" value="3">
-						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+						 <form class="form-horizontal" id="kline_form" action="szx.do">
+							<input type="radio" name="tag" value="2d" class="2d" onchange="hidden_option()"> 今日启明星
+							&nbsp;&nbsp;<input type="radio" name="tag" checked value="3d" class="3d" onchange="view_option()"> 昨日出现启明星
+							<br>
+							<input type="checkbox" name="isStandard" value="yes">必须标准十字星
+							<br>
+							 <div id ="opt">
+							<input type="checkbox" name="throwBaby" value="yes">必须是"弃婴"形态
+							<br>
+							<input type="checkbox" name="k3up" value="yes">K3日股价大涨(相较K1形成刺透或吞没形态)
+							<br>
+							<input type="checkbox" name="vol_increase" value="yes">成交量显著放大(K3与之前K2、K1相比)
+							<br/>
+							 </div>
+							<button type="button" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+						 </form>
 					</div>
 					<div class="col-md-7">
 						<h3 class="page-header">匹配结果</h3>
@@ -69,13 +87,12 @@
 		<!-- end #content -->
 
 	<script>
-		function query() {
-            if (confirm("执行？")) {
-                ybts = document.getElementById("_ybts").value;
-                multiple = document.getElementById("_multiple").value;
-				cxsl = document.getElementById("_cxsl").checked;
-                window.location.href = "/1003.html?action=query&ybts=" + ybts + "&multiple=" + multiple + "&cxsl=" + cxsl;
-            }
+		function hidden_option() {
+			document.getElementById("opt").style.display = "none";
+        }
+
+        function view_option() {
+			document.getElementById("opt").style.display = "";
         }
 	</script>
 	{% endblock %}
