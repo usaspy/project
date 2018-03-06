@@ -7,6 +7,7 @@ from marketradar.module import analyzer
 from marketradar.module.analyzer import  filter_rule_1001
 from marketradar.module.analyzer import  filter_rule_1002
 from marketradar.module.analyzer import  filter_rule_1003
+from marketradar.module.analyzer import  filter_rule_2001
 from marketradar.module import collector
 from marketradar.utils.threadpool import ThreadPool
 from marketradar.utils import datetimeUtil
@@ -81,9 +82,9 @@ def sync():
     session_failed_codes = TMP_FAILED.query.all()  #统计失败股票个数
     return render_template('sync.html',lists_count=len(ls),session_failed_codes=session_failed_codes,msg=msg)
 
-
+#============================================================量=================================================================
 #[1001-温和放量]
-@app.route('/1001.html',methods=['GET','POST'])
+@app.route('/1001',methods=['GET','POST'])
 def _1001():
     match_ls = []
     if request.values.get('action') == 'query':
@@ -101,7 +102,7 @@ def _1001():
     return render_template('1001.html',matchs = match_ls)
 
 #[1002-突放巨量]
-@app.route('/1002.html',methods=['GET','POST'])
+@app.route('/1002',methods=['GET','POST'])
 def _1002():
     match_ls = []
     if request.values.get('action') == 'query':
@@ -117,8 +118,8 @@ def _1002():
 
     return render_template('1002.html',matchs = match_ls)
 
-#[1003-极限缩量]
-@app.route('/1003.html',methods=['GET','POST'])
+#[1003-持续缩量之后的突然放量]
+@app.route('/1003',methods=['GET','POST'])
 def _1003():
     match_ls = []
     if request.values.get('action') == 'query':
@@ -135,6 +136,42 @@ def _1003():
             t.start()
     return render_template('1003.html',matchs = match_ls)
 
+
+#============================================================价=================================================================
+#[2001-十字启明星]
+@app.route('/2001',methods=['GET','POST'])
+def _2001():
+    match_ls = []
+    if request.values.get('action') == 'query':
+        tag = request.values.get('tag') # 哪天出现十字星
+        isStandard = request.values.get('isStandard') #必须标准十字星
+        throwBaby = request.values.get('throwBaby') #必须是"弃婴"形态
+        k3up = request.values.get('k3up') #K3日股价大涨(相较K1形成刺透或吞没形态)
+        vol_increase = request.values.get('vol_increase') #成交量显著放大(K3与之前K2、K1相比)
+
+        ls = LISTS.query.all()  # 统计所有股票个数
+
+        tp = ThreadPool(10)  # 30个线程处理
+        for stock in ls:
+            thread = tp.get_thread()
+            t = thread(target=filter_rule_2001, args=(stock,tag,isStandard,throwBaby,k3up,vol_increase, match_ls, (tp)))
+            t.start()
+    return render_template('2001.html',matchs = match_ls)
+
+
+
+
+
+
+
+
+
+
+#============================================================势=================================================================
+
+
+
+#========================================================COMMON=================================================================
 #定义一个过滤器600168->sh600168
 @app.template_filter('code_prefix')
 def code_prefix(code):

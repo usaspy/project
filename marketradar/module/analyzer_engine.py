@@ -38,7 +38,7 @@ def rule_1002(df, fdts, multiple):
             return False
     return True
 
-#[持续缩量]
+#[持续缩量后首次放量]
 #规则：
 #1.计算前一段时间（ybts-1）的成交量均量
 #2.今日的成交量是昨日的multiple=3倍以上
@@ -63,3 +63,91 @@ def rule_1003(df, ybts, multiple, cxsl='true'):
             if series[i] > series[i+1]: #若没有持续缩量，则不满足条件
                 return False
     return True
+
+#[启明星/十字启明星# ]
+#规则：
+#满足启明星的几个基本条件:
+#1.行情经过多日的下跌，K2日出现十字星线（收/开盘价一致）
+#2.K2相对K1的实体必须有向下跳空缺口（另外如果K3相对K2的实体也有向上跳空缺口则更佳）
+#3.K1成交量较小，预示下跌势头已经趋缓，K3成交量放大
+def rule_2001(df, tag,isStandard,throwBaby,k3up,vol_increase):
+    if tag == '2d':
+        if df.iloc[:, 0].size != 2:
+            return False
+        k2 = df.iloc[0] #今天 返回一个series 如果是iloc[0:0]返回的就是dataframe
+        k1 = df.iloc[1] #昨天
+
+        # 检查是否有向下跳空缺口
+        if (k1['TCLOSE'] > k2['TCLOSE'] and k1['TCLOSE'] > k2['TOPEN'] and k1['TOPEN'] > k2['TCLOSE'] and k1['TOPEN'] > k2['TOPEN']) != True:
+            return False
+
+        # 检查是否为标准十字星
+        if __isCrissStar(k2) != True:
+            return False
+        return True
+
+    if tag == '3d':
+        if df.iloc[:, 0].size != 3:
+            return False
+        k3 = df.iloc[0]  # 今天 返回一个series 如果是iloc[0:0]返回的就是dataframe
+        k2 = df.iloc[1]  # 昨天 返回一个series 如果是iloc[0:0]返回的就是dataframe
+        k1 = df.iloc[2]  # 前天
+
+        # 检查是否有向下跳空缺口
+        if (k1['TCLOSE'] > k2['TCLOSE'] and k1['TCLOSE'] > k2['TOPEN'] and k1['TOPEN'] > k2['TCLOSE'] and k1['TOPEN'] > k2['TOPEN']) != True:
+            return False
+        #k3日股价是上涨的
+        if (k3['TCLOSE'] > k2['TCLOSE'] and k3['TCLOSE'] > k2['TOPEN']) != True:
+            return False
+        #如果k3日的最低价不能低于k2日的最低价
+        if k3.LOW < k2.LOW:
+            return False
+        # 需要检查是否有向上跳空缺口（弃婴形态）
+        if throwBaby == 'yes':
+            if (k3['TCLOSE'] > k2['TCLOSE'] and k3['TCLOSE'] > k2['TOPEN'] and k3['TOPEN'] > k2['TCLOSE'] and k3['TOPEN'] > k2['TOPEN']) != True:
+                return False
+        # 需要检查是否为标准十字星
+        if isStandard == 'yes':
+            if __isCrissStar(k2) != True:
+                return False
+        # 需要检查K3成交量是否放大
+        if vol_increase == 'yes':
+            if k3.VOTURNOVER < k1.VOTURNOVER + k2.VOTURNOVER:
+                return False
+        #K3日股价大涨(相较K1形成刺透或吞没形态)
+        if k3up == 'yes':
+            if __ctxt(k1,k3) != True or __xstmxt(k1,k3) != True:
+                return False
+
+
+    return True
+
+#检查是否标准十字星
+def __isCrissStar(k):
+    v = k['TCLOSE'] - k['TOPEN']
+    if abs(v) < 1E-2:
+        return True
+    return False
+
+#检查是否为刺透形态
+def __ctxt(ka,kb):
+    if ka.TCLOSE > ka.TOPEN:
+        p = ka.TOPEN + (ka.TCLOSE-ka.TOPEN)/2
+        if kb.TCLOSE > p:
+            return True
+    if ka.TCLOSE <= ka.TOPEN:
+        p = ka.TCLOSE + (ka.TOPEN-ka.TCLOSE)/2
+        if kb.TCLOSE > p:
+            return True
+    return False
+
+#检查是否为向上吞没形态
+def __xstmxt(ka,kb):
+    return kb.TCLOSE > ka.TCLOSE and kb.TCLOSE > ka.TOPEN
+
+if __name__ == '__main__':
+    a = 1.1
+    b = 1.7
+    c = 1.8
+    d=1.9
+    print(c<a and c>b)
