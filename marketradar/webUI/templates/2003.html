@@ -34,19 +34,11 @@
  </div>
 						</div>
 						 <form class="form-horizontal" id="kline_form" method = "POST" action="/2003?action=query">
-							<input type="radio" name="tag" value="2d" class="2d" onchange="hidden_option()"> 今日出现十字星
-							&nbsp;&nbsp;<input type="radio" name="tag" checked value="3d" class="3d" onchange="view_option()"> 昨日出现启明星
+							<input type="radio" name="tag" value="A" class="A" > 今日锤子
+							&nbsp;&nbsp;<input type="radio" name="tag" checked value="B" class="B" > 昨日锤子
 							<br>
-							 <div id ="opt">
-							<input type="checkbox" name="isStandard" checked value="yes">必须是标准十字启明星
+							<input type="checkbox" name="no_head" checked value="yes">必须光头阳线
 							<br>
-							<input type="checkbox" name="throwBaby" checked　value="yes">必须是"弃婴"形态(K3跳空高开)
-							<br>
-							<input type="checkbox" name="k3up" checked　value="yes">K3日股价大涨(相较K1形成刺透或看涨吞没形态)
-							<br>
-							<input type="checkbox" name="vol_increase" checked value="yes">成交量显著放大(K3与之前K2、K1相比)
-							<br/>
-							 </div>
 							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 						 </form>
 					</div>
@@ -89,18 +81,4 @@
 			</div>
 		</div>
 		<!-- end #content -->
-
-	<script>
-		function hidden_option() {
-			document.getElementById("opt").style.display = "none";
-        }
-
-        function view_option() {
-			document.getElementById("opt").style.display = "";
-        }
-
-        function  doit() {
-			document.getElementById("kline_form").submit();
-        }
-	</script>
 	{% endblock %}

@@ -123,9 +123,70 @@ def rule_2001(df, tag,isStandard,throwBaby,k3up,vol_increase):
         if k3up == 'yes':
             if __ctxt(k1,k3) != True or __kztmxt(k1,k3) != True:
                 return False
+    return True
 
+#[锤子线]
+#规则：
+#满足锤子线的几个基本条件:
+#1.行情经过多日的下跌
+#2.下影线越长越好
+def rule_2003(df, tag, no_head):
+    if df.iloc[:, 0].size != 5:
+        return False
+    #5天内是否持续下跌
+    if __is_continue_fall(df) != True:
+        return False
+    if tag == 'A':
+        k = df.iloc[0]  # 今日锤子
+        # 去掉一字涨跌停的股票
+        if k.HIGH == k.LOW:
+            return False
+        # 实体和上影线长度不超过总的1/3
+        if k.TCLOSE >= k.TOPEN:
+            if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 3:
+                return False
+        elif k.TCLOSE < k.TOPEN:
+            if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 3:
+                return False
+
+        # 必须是光头阳线
+        if no_head == 'yes':
+            if k.TCLOSE != k.HIGH:
+                return False
+    if tag == 'B':
+        k3 = df.iloc[0]  #
+        k = df.iloc[1]  # 昨日是锤子
+
+        # 去掉一字涨跌停的股票
+        if k.HIGH == k.LOW:
+            return False
+        # 实体和上影线长度不超过总的1/3
+        if k.TCLOSE >= k.TOPEN:
+            if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 3:
+                return False
+        elif k.TCLOSE < k.TOPEN:
+            if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 3:
+                return False
+
+        # 必须是光头阳线
+        if no_head == 'yes':
+            if k.TCLOSE != k.HIGH:
+                return False
+
+        #第二天没有创新低
+        if k3.LOW > k.LOW:
+            return False
+        #第二天收盘价高于前日的最高价
+        if k3.TCLOSE < k.HIGH:
+            return False
 
     return True
+
+# 检查是否持续下跌
+def __is_continue_fall(df):
+    print(df)
+    return True
+
 
 #检查是否标准十字星
 def __isCrissStar(k):
