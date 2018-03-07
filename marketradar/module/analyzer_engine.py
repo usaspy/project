@@ -40,24 +40,29 @@ def rule_1002(df, fdts, multiple):
 
 #[持续缩量后首次放量]
 #规则：
-#1.计算前一段时间（ybts-1）的成交量均量
-#2.今日的成交量是昨日的multiple=3倍以上
-#3.今日的成交量是前期(ybts-1)成交均量的2倍以上
+#1.计算前一段时间（ybts-1）的成交量均量avg_vol
+#2.过去每一天的成交量都都不会很大，最多只有成交均量avg_vol的2倍
+#3.今日的成交量是昨日的multiple=3倍以上
+#4.今日的成交量是前期(ybts-1)成交均量的2倍以上
 #4.T-3,T-2,T-1,三日的成交量呈典型的持续缩量态势
 def rule_1003(df, ybts, multiple, cxsl='true'):
     if df.iloc[:,0].size != ybts:
         return False
 
     series = df["VOTURNOVER"]
-    #step.2
+    #step.3
     if series[0]/series[1] < multiple:
         return False
     #step.1
     avg_vol = series[1:].sum()/(ybts-1)
-    # step.3
+    #step.2
+    for i in series[1:]:
+        if series[i]/avg_vol > 2:
+            return False
+    # step.4
     if series[0]/avg_vol < 2:
         return False
-    # step.4
+    # step.5
     if cxsl == 'true':
         for i in range(1, 4):
             if series[i] > series[i+1]: #若没有持续缩量，则不满足条件

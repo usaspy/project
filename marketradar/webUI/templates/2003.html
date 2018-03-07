@@ -1,0 +1,106 @@
+	{% extends "_refer_.html" %}
+	{% block body %}
+	<div id="page-container" class=" page-without-sidebar">
+		<!-- begin #content -->
+			<!-- begin page-header -->
+			<h1 class="page-header">锤子线 / Code=2003 <small></small></h1>
+			<!-- end page-header -->
+
+			<div class="panel panel-inverse">
+			    <div class="panel-body">
+					<div class="col-md-5">
+						<div class="alert alert-info fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是锤子线？</h4>
+
+									**首先得明确,反转形态的出现并不代表接下来趋势一定会反转,它只是一种信号,表示过去延续的趋势出现了异常现象,可能发生某种变化(即可能上涨亦可能下跌)
+<div class="slide_div">
+
+<br>
+	<b>锤子线/倒锤子线是一种反转形态,通常出现在一段下跌趋势之后,预示着有可能反弹上涨的信号(与之相反的是上吊线/流星线)</b>
+<br>
+满足锤子线的几个基本条件:<br>
+1)行情必须处于一个清晰的下降趋势,出现了连续多日以来的最低点(例如7天内)<br>
+2)实体颜色无所谓(红色更好)<br>
+3)上影线越短越好(最好没有)<br>
+4)实体越小越好(最好是一字形类似十字星)<br>
+5)下影线越长越好(下影线长度至少要是实体的2倍以上)
+<br><br>
+<strong>提示:</strong> <br>
+    1)如果锤子线出现后的次日价格跳空高开,缺口越大,那么锤子线构成市场底部的可能性越大<br>
+    2)如果次日收盘价低于锤子线的实体部分,则应果断卖出<br>
+ </div>
+						</div>
+						 <form class="form-horizontal" id="kline_form" method = "POST" action="/2003?action=query">
+							<input type="radio" name="tag" value="2d" class="2d" onchange="hidden_option()"> 今日出现十字星
+							&nbsp;&nbsp;<input type="radio" name="tag" checked value="3d" class="3d" onchange="view_option()"> 昨日出现启明星
+							<br>
+							 <div id ="opt">
+							<input type="checkbox" name="isStandard" checked value="yes">必须是标准十字启明星
+							<br>
+							<input type="checkbox" name="throwBaby" checked　value="yes">必须是"弃婴"形态(K3跳空高开)
+							<br>
+							<input type="checkbox" name="k3up" checked　value="yes">K3日股价大涨(相较K1形成刺透或看涨吞没形态)
+							<br>
+							<input type="checkbox" name="vol_increase" checked value="yes">成交量显著放大(K3与之前K2、K1相比)
+							<br/>
+							 </div>
+							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+						 </form>
+					</div>
+					<div class="col-md-7">
+						<h3 class="page-header">匹配结果</h3>
+
+						<div class="dataTables_scroll">
+							<div class="dataTables_scrollBody" style="overflow: auto; height: 420px; width: 100%;">
+								<table id="data-table" class="table table-striped table-bordered dataTable no-footer KeyTable" role="grid" aria-describedby="data-table_info" style="width: 100%;">
+									<thead>
+                                        <tr role="row" style="height: 0px;">
+											<th class="sorting_asc" aria-controls="data-table" rowspan="1" colspan="1" style="width: 10%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending"><div class="dataTables_sizing" >#</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 30%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Browser: activate to sort column ascending"><div class="dataTables_sizing" >代码</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 40%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="Platform(s): activate to sort column ascending"><div class="dataTables_sizing" >名称</div></th>
+											<th class="sorting" aria-controls="data-table" rowspan="1" colspan="1" style="width: 20%; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;" aria-label="CSS grade: activate to sort column ascending"><div class="dataTables_sizing" ></div></th>
+										</tr>
+                                    </thead>
+
+                                    <tbody>
+									{% for stock in  matchs %}
+									 	{% if loop.length == 0 %}
+											<tr class="gradeA odd" role="row">
+												 <td class="sorting_1" colspan="4">没有数据</td>
+											</tr>
+									  	{% endif %}
+                                    	<tr class="gradeA odd" role="row">
+                                            <td class="sorting_1">{{loop.index}}</td>
+                                            <td>{{stock.CODE}}</td>
+                                            <td>{{stock.NAME}}</td>
+                                            <td><a href="#" onclick="javascript:window.open('http://image.sinajs.cn/newchart/daily/n/{{ stock.CODE | code_prefix }}.gif')">查看</a></td>
+                                        </tr>
+                   		 			{% endfor %}
+									</tbody>
+                                </table>
+							</div>
+						</div>
+
+					</div>
+			    </div>
+			</div>
+		</div>
+		<!-- end #content -->
+
+	<script>
+		function hidden_option() {
+			document.getElementById("opt").style.display = "none";
+        }
+
+        function view_option() {
+			document.getElementById("opt").style.display = "";
+        }
+
+        function  doit() {
+			document.getElementById("kline_form").submit();
+        }
+	</script>
+	{% endblock %}
