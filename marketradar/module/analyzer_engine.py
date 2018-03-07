@@ -114,9 +114,9 @@ def rule_2001(df, tag,isStandard,throwBaby,k3up,vol_increase):
         if vol_increase == 'yes':
             if k3.VOTURNOVER < k1.VOTURNOVER + k2.VOTURNOVER:
                 return False
-        #K3日股价大涨(相较K1形成刺透或吞没形态)
+        #K3日股价大涨(相较K1形成刺透或看涨吞没形态)
         if k3up == 'yes':
-            if __ctxt(k1,k3) != True or __xstmxt(k1,k3) != True:
+            if __ctxt(k1,k3) != True or __kztmxt(k1,k3) != True:
                 return False
 
 
@@ -130,6 +130,7 @@ def __isCrissStar(k):
     return False
 
 #检查是否为刺透形态
+##通常刺透形态 ka是阴线 kb是阳线， kb刺入越深越好
 def __ctxt(ka,kb):
     if ka.TCLOSE > ka.TOPEN:
         p = ka.TOPEN + (ka.TCLOSE-ka.TOPEN)/2
@@ -141,8 +142,9 @@ def __ctxt(ka,kb):
             return True
     return False
 
-#检查是否为向上吞没形态
-def __xstmxt(ka,kb):
+#检查是否为看涨吞没形态
+#通常看涨吞没 ka是阴线 kb是阳线。为保险起见我全部判断。
+def __kztmxt(ka,kb):
     return kb.TCLOSE > ka.TCLOSE and kb.TCLOSE > ka.TOPEN
 
 if __name__ == '__main__':
