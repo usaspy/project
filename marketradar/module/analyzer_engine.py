@@ -1,4 +1,5 @@
 from marketradar.utils.Exception import FilterError
+import numpy as np
 
 #[温和放量]
 #规则：
@@ -133,9 +134,7 @@ def rule_2001(df, tag,isStandard,throwBaby,k3up,vol_increase):
 def rule_2003(df, tag, no_head):
     if df.iloc[:, 0].size != 5:
         return False
-    #5天内是否持续下跌
-    #if __is_continue_fall(df) != True:
-        #return False
+
     if tag == 'A':
         k = df.iloc[0]  # 今日锤子
         # 去掉一字涨跌停的股票
@@ -148,6 +147,10 @@ def rule_2003(df, tag, no_head):
         elif k.TCLOSE < k.TOPEN:
             if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 3:
                 return False
+
+        # 5天内是否持续下跌
+        if __is_continue_fall(df[0:]) != True:
+            return False
 
         # 必须是光头阳线
         if no_head == 'yes':
@@ -167,6 +170,9 @@ def rule_2003(df, tag, no_head):
         elif k.TCLOSE < k.TOPEN:
             if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 3:
                 return False
+        # 5-1天内是否持续下跌
+        if __is_continue_fall(df[1:]) != True:
+            return False
 
         # 必须是光头阳线
         if no_head == 'yes':
@@ -184,19 +190,19 @@ def rule_2003(df, tag, no_head):
 
 # 检查是否持续下跌
 def __is_continue_fall(df):
-    return True
-    if df.tail(1).LOW < df.head(1).LOW:
+    LOWS = np.array(df['LOW'])
+    if LOWS.min() != df.iloc[0].LOW:  #完美的持续下跌形态中，最近一日LOW值应为最低值
         return False
-
+    # 检查这几日是否持续下跌形态
     offset = 0
-    for i in df.index:
-        if i == df.tail(1).index:
-            break
-        if df.loc[i].LOW <= df.loc[i+1].LOW:
+    i = 1
+    while i < df.iloc[:,0].size:
+        if df.iloc[i-1].LOW <= df.iloc[i].LOW:
             offset += 1
         else:
             offset -= 1
-    if offset / df.index < 0.7: #如果７０％的概率，当日LOW比前日LOW更低
+        i+=1
+    if offset / df.iloc[:, 0].size < 0.7:  # 如果７０％的概率，当日LOW比前日LOW更低
         return False
     return True
 
