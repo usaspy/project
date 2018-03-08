@@ -134,8 +134,8 @@ def rule_2003(df, tag, no_head):
     if df.iloc[:, 0].size != 5:
         return False
     #5天内是否持续下跌
-    if __is_continue_fall(df) != True:
-        return False
+    #if __is_continue_fall(df) != True:
+        #return False
     if tag == 'A':
         k = df.iloc[0]  # 今日锤子
         # 去掉一字涨跌停的股票
@@ -184,7 +184,20 @@ def rule_2003(df, tag, no_head):
 
 # 检查是否持续下跌
 def __is_continue_fall(df):
-    print(df)
+    return True
+    if df.tail(1).LOW < df.head(1).LOW:
+        return False
+
+    offset = 0
+    for i in df.index:
+        if i == df.tail(1).index:
+            break
+        if df.loc[i].LOW <= df.loc[i+1].LOW:
+            offset += 1
+        else:
+            offset -= 1
+    if offset / df.index < 0.7: #如果７０％的概率，当日LOW比前日LOW更低
+        return False
     return True
 
 
