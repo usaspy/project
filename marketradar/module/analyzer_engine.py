@@ -142,10 +142,10 @@ def rule_2003(df, tag, no_head):
             return False
         # 实体和上影线长度不超过总的1/3
         if k.TCLOSE >= k.TOPEN:
-            if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 3:
+            if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 1.5:
                 return False
         elif k.TCLOSE < k.TOPEN:
-            if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 3:
+            if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 1.5:
                 return False
 
         # 5天内是否持续下跌
@@ -165,22 +165,21 @@ def rule_2003(df, tag, no_head):
             return False
         # 实体和上影线长度不超过总的1/3
         if k.TCLOSE >= k.TOPEN:
-            if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 3:
+            if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 1.5:
                 return False
         elif k.TCLOSE < k.TOPEN:
-            if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 3:
+            if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 1.5:
                 return False
         # 5-1天内是否持续下跌
         if __is_continue_fall(df[1:]) != True:
             return False
-
         # 必须是光头阳线
         if no_head == 'yes':
             if k.TCLOSE != k.HIGH:
                 return False
 
         #第二天没有创新低
-        if k3.LOW > k.LOW:
+        if k3.LOW < k.LOW:
             return False
         #第二天收盘价高于前日的最高价
         if k3.TCLOSE < k.HIGH:
@@ -199,10 +198,8 @@ def __is_continue_fall(df):
     while i < df.iloc[:,0].size:
         if df.iloc[i-1].LOW <= df.iloc[i].LOW:
             offset += 1
-        else:
-            offset -= 1
         i+=1
-    if offset / df.iloc[:, 0].size < 0.7:  # 如果７０％的概率，当日LOW比前日LOW更低
+    if offset / df.iloc[:, 0].size < 0.57:  # 如果走低天数/总天数>0.57 则认为是持续下跌形态
         return False
     return True
 
@@ -228,9 +225,12 @@ def __ctxt(ka,kb):
     return False
 
 #检查是否为看涨吞没形态
-#通常看涨吞没 ka是阴线 kb是阳线。为保险起见我全部判断。
+#通常看涨吞没 ka是阴线 kb是阳线。
 def __kztmxt(ka,kb):
-    return kb.TCLOSE > ka.TCLOSE and kb.TCLOSE > ka.TOPEN
+    if ka.PCHG <= 0 and kb.PCHG >=0:
+        return kb.TCLOSE > ka.TOPEN
+    else:
+        return False
 
 if __name__ == '__main__':
     a = 1.1
