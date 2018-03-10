@@ -19,13 +19,13 @@
 								</p>
 						</div>
 						<form class="form-horizontal" id="kline_form" method = "POST" action="/1002?action=query" target="result_page">
-						巨量天数：	<select class="form-control" id="_fdts" >
+						巨量天数：	<select class="form-control" name="fdts" >
                                             <option selected value="1">1天</option>
                                             <option value="2">2天</option>
                                             <option value="3">3天</option>
                                         </select>
-						放大倍数：	<input type="text" id="_multiple" class="form-control" value="7">
-						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+						放大倍数：	<input type="text" name="multiple" class="form-control" value="7">
+						<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 							</form>
 					</div>
 					<div class="col-md-7">

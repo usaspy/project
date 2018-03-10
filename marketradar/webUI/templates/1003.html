@@ -20,14 +20,14 @@
 								</p>
 						</div>
 						<form class="form-horizontal" id="kline_form" method = "POST" action="/1003?action=query" target="result_page">
-						样本天数：	<select class="form-control" id="_ybts">
-                                            <option value="10">10天</option>
-                                            <option selected value="15">15天</option>
-                                        </select>
-									<input type="checkbox" id="_cxsl" value="">放大前<font color="red" size="4">3</font>日的成交量满足持续缩量形态
-						<br/>
-						今日较昨日放大倍数：	<input type="text" id="_multiple" class="form-control" value="3">
-						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+							样本天数：	<select class="form-control" name="ybts">
+												<option value="10">10天</option>
+												<option selected value="15">15天</option>
+											</select>
+										<input type="checkbox" name="cxsl" value="">放大前<font color="red" size="4">3</font>日的成交量满足持续缩量形态
+							<br/>
+							今日较昨日放大倍数：	<input type="text" name="multiple" class="form-control" value="3">
+							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 						</form>
 					</div>
 					<div class="col-md-7">

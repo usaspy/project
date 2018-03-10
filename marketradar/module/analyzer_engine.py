@@ -76,7 +76,7 @@ def rule_1003(df, ybts, multiple, cxsl='true'):
     avg_vol = series[1:].sum()/(ybts-1)
     #step.2
     for i in series[1:]:
-        if series[i]/avg_vol > 2:
+        if i / avg_vol > 2:
             return False
     # step.4
     if series[0]/avg_vol < 2:

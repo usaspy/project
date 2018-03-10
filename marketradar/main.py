@@ -60,9 +60,9 @@ class RELATION(db.Model):
     REMARK = db.Column(db.String(50))
 
 
-__addition_info = RELATION.query.all()
+__RELATION_INFO = RELATION.query.all()
+print(__RELATION_INFO)
 
-print(__addition_info)
 #[首页]
 @app.route('/',methods=['GET'])
 def index():
@@ -223,7 +223,9 @@ def favorite():
     code = request.values.get('code')
     action = request.values.get('action')
     if action == 'cancel':
-        dbpool.executeUpdate(['update __relation set FLAG=0 where CODE=%s'% code])
+        #dbpool.executeUpdate(['update __relation set FLAG=0 where CODE=%s'% code])
+        db.session.query(RELATION).filter(RELATION.CODE == code).update({RELATION.FLAG : 0})
+        db.session.commit()
         return "<script>alert('取消收藏成功！')</script>"
     elif action == 'add':
         #RELATION.filter_by(CODE=code).update({RELATION.FLAG: '1'})
@@ -250,7 +252,7 @@ def code_prefix(code):
 #定义一个过滤器 添加收藏
 @app.template_filter('in_favorite')
 def in_favorite(code):
-    for ad in __addition_info:
+    for ad in __RELATION_INFO:
         if ad.CODE == code and ad.FLAG == 1:
             return "<a href='/favorite?action=cancel&code=" + code + "' target='_blank'><font color=gray>已收藏</font></a>"
     return "<a href='/favorite?action=add&code=" + code + "' target='_blank'>添加收藏</a>"
