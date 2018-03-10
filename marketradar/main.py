@@ -13,6 +13,7 @@ from marketradar.module.analyzer import  filter_rule_2004
 from marketradar.module import collector
 from marketradar.utils.threadpool import ThreadPool
 from marketradar.utils import datetimeUtil
+from marketradar.utils import dbpool
 
 app = Flask(__name__,static_folder='webUI/static',template_folder='webUI/templates')
 
@@ -52,6 +53,16 @@ class TMP_FAILED(db.Model):
     CODE = db.Column(db.String(50),primary_key=True)
     NAME = db.Column(db.String(50))
 
+class RELATION(db.Model):
+    __tablename__ = '__RELATION'
+    CODE = db.Column(db.String(50),primary_key=True)
+    FLAG = db.Column(db.String(50))
+    REMARK = db.Column(db.String(50))
+
+
+__addition_info = RELATION.query.all()
+
+print(__addition_info)
 #[首页]
 @app.route('/',methods=['GET'])
 def index():
@@ -206,7 +217,25 @@ def _2004():
 
 #============================================================势=================================================================
 
-
+#[收藏夹]
+@app.route('/favorite',methods=['GET'])
+def favorite():
+    code = request.values.get('code')
+    action = request.values.get('action')
+    if action == 'cancel':
+        dbpool.executeUpdate(['update __relation set FLAG=0 where CODE=%s'% code])
+        return "<script>alert('取消收藏成功！')</script>"
+    elif action == 'add':
+        #RELATION.filter_by(CODE=code).update({RELATION.FLAG: '1'})
+        r = RELATION.query.filter_by(CODE=code).first()
+        if r == None:
+            r = RELATION(CODE=code, FLAG=1, REMARK='')
+            db.session.add(r)
+            db.session.commit()
+        else:
+            dbpool.executeUpdate(['update __relation set FLAG=1 where CODE=%s'% code])
+        return "<script>alert('加入收藏夹成功！')</script>"
+    return None
 
 #========================================================COMMON=================================================================
 #定义一个过滤器600168->sh600168
@@ -217,6 +246,14 @@ def code_prefix(code):
     if code[0:2] == '60':
         _code = "sh" + code
     return _code
+
+#定义一个过滤器 添加收藏
+@app.template_filter('in_favorite')
+def in_favorite(code):
+    for ad in __addition_info:
+        if ad.CODE == code and ad.FLAG == 1:
+            return "<a href='/favorite?action=cancel&code=" + code + "' target='_blank'><font color=gray>已收藏</font></a>"
+    return "<a href='/favorite?action=add&code=" + code + "' target='_blank'>添加收藏</a>"
 
 if __name__ == '__main__':
     app.run(host=conf.get('web','host'), port=conf.get('web','port'), debug=False)
