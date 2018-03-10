@@ -106,8 +106,8 @@ def _1001():
 #[1002-突放巨量]
 @app.route('/1002',methods=['GET','POST'])
 def _1002():
-    match_ls = []
     if request.values.get('action') == 'query':
+        match_ls = []
         multiple = int(request.values.get('multiple')) #默认放量倍数
         fdts = int(request.values.get('fdts')) #放量天数
         ls = LISTS.query.all() #统计所有股票个数
@@ -117,14 +117,15 @@ def _1002():
             thread = tp.get_thread()
             t = thread(target=filter_rule_1002, args=(stock, fdts, multiple, match_ls,(tp)))
             t.start()
+        return render_template('result.html',matchs = match_ls)
 
-    return render_template('1002.html',matchs = match_ls)
+    return render_template('1002.html')
 
 #[1003-持续缩量之后的突然放量]
 @app.route('/1003',methods=['GET','POST'])
 def _1003():
-    match_ls = []
     if request.values.get('action') == 'query':
+        match_ls = []
         ybts = int(request.values.get('ybts')) #样本天数
         multiple = int(request.values.get('multiple')) #放大倍数
         cxsl = request.values.get('cxsl') #是否持续缩量
@@ -136,15 +137,17 @@ def _1003():
             thread = tp.get_thread()
             t = thread(target=filter_rule_1003, args=(stock, ybts,multiple,cxsl, match_ls, (tp)))
             t.start()
-    return render_template('1003.html',matchs = match_ls)
+        return render_template('result.html',matchs = match_ls)
+
+    return render_template('1003.html')
 
 
 #============================================================价=================================================================
 #[2001-十字启明星]
 @app.route('/2001',methods=['GET','POST'])
 def _2001():
-    match_ls = []
     if request.values.get('action') == 'query':
+        match_ls = []
         tag = request.values.get('tag') # 哪天出现十字星
         isStandard = request.values.get('isStandard') #必须标准十字星
         throwBaby = request.values.get('throwBaby') #必须是"弃婴"形态
@@ -158,14 +161,15 @@ def _2001():
             thread = tp.get_thread()
             t = thread(target=filter_rule_2001, args=(stock,tag,isStandard,throwBaby,k3up,vol_increase, match_ls, (tp)))
             t.start()
-    return render_template('2001.html',matchs = match_ls)
+        return render_template('result.html',matchs = match_ls)
+    return render_template('2001.html')
 
 
 #[2003-锤子线]
 @app.route('/2003',methods=['GET','POST'])
 def _2003():
-    match_ls = []
     if request.values.get('action') == 'query':
+        match_ls = []
         tag = request.values.get('tag') # 哪天出现锤子
         no_head = request.values.get('no_head') #必须光头
 
@@ -176,15 +180,16 @@ def _2003():
             thread = tp.get_thread()
             t = thread(target=filter_rule_2003, args=(stock,tag,no_head, match_ls, (tp)))
             t.start()
-    return render_template('2003.html',matchs = match_ls)
+        return render_template('result.html',matchs = match_ls)
+    return render_template('2003.html')
 
 
 
 #[2004-看涨吞没形态 ]
 @app.route('/2004',methods=['GET','POST'])
 def _2004():
-    match_ls = []
     if request.values.get('action') == 'query':
+        match_ls = []
         ybts = int(request.values.get('ybts')) # 样本天数
 
         ls = LISTS.query.all()  # 统计所有股票个数
@@ -194,7 +199,8 @@ def _2004():
             thread = tp.get_thread()
             t = thread(target=filter_rule_2004, args=(stock,ybts, match_ls, (tp)))
             t.start()
-    return render_template('2004.html',matchs = match_ls)
+        return render_template('result.html',matchs = match_ls)
+    return render_template('2004.html')
 
 
 
