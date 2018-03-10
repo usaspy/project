@@ -187,6 +187,30 @@ def rule_2003(df, tag, no_head):
 
     return True
 
+
+#[看涨吞没形态]
+#规则：
+#满足锤子线的几个基本条件:
+#1.行情经过多日的下跌
+#2.相邻的两根K线，一根阴一根阳
+#3.K2实体完全吞没K1实体,(如果向前吞没更多则更更好)
+#4.K2的成交量比较大
+def rule_2004(df, ybts):
+    if df.iloc[:, 0].size != ybts:
+        return False
+
+    k2 = df.iloc[0]  # 今日
+    k1 = df.iloc[1]  # 昨日
+    #4
+    if k2.VOTURNOVER < k1.VOTURNOVER * 2: #成交量放大低于2倍
+        return False
+    #1
+    if __is_continue_fall(df[1:]) != True:
+        return False
+
+    return __kztmxt(k1,k2)
+
+
 # 检查是否持续下跌
 def __is_continue_fall(df):
     LOWS = np.array(df['LOW'])
@@ -228,7 +252,7 @@ def __ctxt(ka,kb):
 #通常看涨吞没 ka是阴线 kb是阳线。
 def __kztmxt(ka,kb):
     if ka.PCHG <= 0 and kb.PCHG >=0:
-        return kb.TCLOSE > ka.TOPEN
+        return kb.TCLOSE > ka.TOPEN and kb.TOPEN <= ka.TCLOSE
     else:
         return False
 

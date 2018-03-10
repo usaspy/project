@@ -9,6 +9,7 @@ from marketradar.module.analyzer import  filter_rule_1002
 from marketradar.module.analyzer import  filter_rule_1003
 from marketradar.module.analyzer import  filter_rule_2001
 from marketradar.module.analyzer import  filter_rule_2003
+from marketradar.module.analyzer import  filter_rule_2004
 from marketradar.module import collector
 from marketradar.utils.threadpool import ThreadPool
 from marketradar.utils import datetimeUtil
@@ -179,7 +180,21 @@ def _2003():
 
 
 
+#[2004-看涨吞没形态 ]
+@app.route('/2004',methods=['GET','POST'])
+def _2004():
+    match_ls = []
+    if request.values.get('action') == 'query':
+        ybts = int(request.values.get('ybts')) # 样本天数
 
+        ls = LISTS.query.all()  # 统计所有股票个数
+
+        tp = ThreadPool(10)  # 30个线程处理
+        for stock in ls:
+            thread = tp.get_thread()
+            t = thread(target=filter_rule_2004, args=(stock,ybts, match_ls, (tp)))
+            t.start()
+    return render_template('2004.html',matchs = match_ls)
 
 
 

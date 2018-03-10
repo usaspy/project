@@ -3,7 +3,7 @@
 	<div id="page-container" class=" page-without-sidebar">
 		<!-- begin #content -->
 			<!-- begin page-header -->
-			<h1 class="page-header">温和放量 / Code=1001 <small></small></h1>
+			<h1 class="page-header">看涨吞没形态 / Code=2004 <small></small></h1>
 			<!-- end page-header -->
 
 			<div class="panel panel-inverse">
@@ -13,22 +13,30 @@
                             <button type="button" class="close" data-dismiss="alert">
                                 <span aria-hidden="true">×</span>
                             </button>
-                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是温和放量？</h4>
-								<p>
-									在过去一段时间里（默认<font color="red" size="4">15</font>T）成交量总是不温不火，但最近成交量开始出现连续放大（至少<font color="red" size="4">2</font>倍以上），呈稳步放量态势。.
-								</p>
-				</div>
-						样本天数：<select class="form-control" id="_ybts">
-                                            <option value="10">10天</option>
-                                            <option selected value="15">15天</option>
-                                            <option  value="20">20天</option>
-                                        </select>
-						温和放量天数：	<select class="form-control" id="_fdts">
-                                            <option value="2">2天</option>
-                                            <option selected value="3">3天</option>
-                                        </select>
-						放大倍数：	<input type="text" id="_multiple" class="form-control" value="2">
-						<button type="button" onclick="query()" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是看涨吞没形态？</h4>
+
+看涨吞没形态也是一种反转形态,通常出现在一段明确的下跌趋势之后,预示着有可能反弹上涨的信号(与之相反的是看跌吞没形态)
+<div class="slide_div">
+<br>
+满足看涨吞没形态的几个基本条件:<br>
+1)行情必须处于一个清晰的下降趋势,出现了长期/超长期以来的最低点(例如5-10天内)<br>
+2)由相邻的两条K线组成,其中今日K线的实体必须覆盖昨日K线的实体(上下影线可以不必吞没)<br>
+3)两日的K线实体颜色必须相反<br>
+<br>
+<strong>提示:</strong> <br>
+    1)如果第一天实体很小,第二天实体很大则更好<br>
+    2)第二个实体伴有超额的成交量最好<br>
+    3)第二个实体向前吞没不止一个实体(越多越好)<br>
+    4)明日如果跌破今日的最低点则应止损<br>
+    5)如果看涨吞没出现在上升趋势中则参考价值很有限<br>
+ </div>
+						</div>
+						 <form class="form-horizontal" id="kline_form" method = "POST" action="/2004?action=query">
+							样本天数：（在此期间内为明显的下降趋势）
+							 <input type="input" class="form-control" id="ybts" name="ybts" placeholder="" value="7">
+							<br>
+							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+						 </form>
 					</div>
 					<div class="col-md-7">
 						<h3 class="page-header">匹配结果</h3>
@@ -47,7 +55,7 @@
 
                                     <tbody>
 									{% for stock in  matchs %}
-										{% if loop.length == 0 %}
+									 	{% if loop.length == 0 %}
 											<tr class="gradeA odd" role="row">
 												 <td class="sorting_1" colspan="4">没有数据</td>
 											</tr>
@@ -69,16 +77,4 @@
 			</div>
 		</div>
 		<!-- end #content -->
-
-	<script>
-		function query() {
-            if (confirm("执行？")) {
-                ybts = document.getElementById("_ybts").value;
-                fdts = document.getElementById("_fdts").value;
-                multiple = document.getElementById("_multiple").value;
-
-                window.location.href = "/1001?action=query&ybts=" + ybts + "&fdts=" + fdts + "&multiple=" + multiple;
-            }
-        }
-	</script>
 	{% endblock %}
