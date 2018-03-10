@@ -88,20 +88,20 @@ def sync():
 #[1001-温和放量]
 @app.route('/1001',methods=['GET','POST'])
 def _1001():
-    match_ls = []
     if request.values.get('action') == 'query':
-        ybts = int(request.values.get('ybts')) #样本天数
-        fdts = int(request.values.get('fdts')) #放量天数
-        multiple = int(request.values.get('multiple')) #默认放量倍数
+        match_ls = []
+        tag = request.values.get('tag') #
+        fdts = int(request.values.get('_fdts')) #放量天数
         ls = LISTS.query.all() #统计所有股票个数
 
         tp = ThreadPool(10)  #30个线程处理
         for stock in ls:
             thread = tp.get_thread()
-            t = thread(target=filter_rule_1001, args=(stock, ybts, fdts, multiple, match_ls,(tp)))
+            t = thread(target=filter_rule_1001, args=(stock, tag, fdts, match_ls,(tp)))
             t.start()
+        return render_template('result.html',matchs = match_ls)
 
-    return render_template('1001.html',matchs = match_ls)
+    return render_template('1001.html')
 
 #[1002-突放巨量]
 @app.route('/1002',methods=['GET','POST'])

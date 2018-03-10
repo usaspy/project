@@ -1,27 +1,45 @@
 from marketradar.utils.Exception import FilterError
 import numpy as np
 
-#[温和放量]
+#[温和放量上涨]
 #规则：
-#1.确定fdts放大天数
-#2.计算前一段时间（ybts-fdts）的成交量均量
-#3.放大天数内每日成交量超过前一日的成交量
-#4.放大天数内每日成交量至少是前期平均量的multiple=2倍
-def rule_1001(df, ybts, fdts, multiple):
-    if df.iloc[:,0].size != ybts:
+#1.成交量相对于前一天放大
+#2.价格相对于前一天上涨
+#3.是否温和：每天的涨幅不能超过2%
+#[持续缩量下跌]
+#规则：
+#1.成交量相对于前一天缩小
+#2.价格相对于前一天下跌
+def rule_1001(df, tag, fdts):
+    if df.iloc[:,0].size != fdts+1:
         return False
 
-    series = df["VOTURNOVER"]
-    #step.3
-    for i in range(0,fdts):
-        if series[i] < series[i+1]:#如果最近几天成交量没有持续放大，则不满足条件，返回False
-            return False
-    #step.2
-    avg_vol = series[fdts:].sum()/(ybts-fdts)
-    # step.4
-    for i in range(0,fdts):
-        if series[i]/avg_vol < multiple:#如果最近几天成交量没有持续放大，则不满足条件，返回False
-            return False
+    vol_series = df["VOTURNOVER"]
+    pchg_series = df["PCHG"]
+    if tag == "A":
+        #step.1
+        for i in range(0,fdts):
+            if (vol_series[i] / vol_series[i+1] < 1.0) or (vol_series[i] / vol_series[i+1] > 1.5):#如果最近几天成交量没有持续温和放大，则不满足条件，返回False
+                return False
+        # step.2
+        for i in range(0, fdts):
+            if pchg_series[i] <= 0:  # 如果最近几天价格涨幅没有持续为正，则不满足条件，返回False
+                return False
+
+        # step.3
+        for i in range(0, fdts):
+            if pchg_series[i] > 2.0:  # 涨幅过大
+                return False
+    if tag == "B":
+        # step.1
+        for i in range(0, fdts):
+            if vol_series[i] / vol_series[i + 1] > 1.0:  # 如果最近几天成交量没有持续缩量，则不满足条件，返回False
+                return False
+        # step.2
+        for i in range(0, fdts):
+            if pchg_series[i] > 0:  # 如果最近几天价格涨幅没有持续为负，则不满足条件，返回False
+                return False
+
     return True
 
 #[突放巨量]
