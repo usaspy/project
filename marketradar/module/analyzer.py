@@ -35,10 +35,10 @@ def __getData(code,ybts):
     return pd.DataFrame(df.values,index=new_Index,columns=df.columns)
 
 #温和放量
-def filter_rule_1001(stock,tag,fdts,match_ls,*args):
+def filter_rule_1001(stock,tag,ybts,match_ls,*args):
     try:
-        df = __getData(stock.CODE, fdts+1)
-        if analyzer_engine.rule_1001(df, tag, fdts):
+        df = __getData(stock.CODE, ybts+1)
+        if analyzer_engine.rule_1001(df, tag, ybts):
             match_ls.append(stock)
     except Exception as e:
         logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))

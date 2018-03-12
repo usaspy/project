@@ -5,38 +5,38 @@ import numpy as np
 #规则：
 #1.成交量相对于前一天放大
 #2.价格相对于前一天上涨
-#3.是否温和：每天的涨幅不能超过2%
+#3.是否温和：每天的涨幅不能超过3%
 #[持续缩量下跌]
 #规则：
 #1.成交量相对于前一天缩小
 #2.价格相对于前一天下跌
-def rule_1001(df, tag, fdts):
-    if df.iloc[:,0].size != fdts+1:
+def rule_1001(df, tag, ybts):
+    if df.iloc[:,0].size != ybts+1:
         return False
 
-    vol_series = df["VOTURNOVER"]
-    pchg_series = df["PCHG"]
+    vol_series = df["VOTURNOVER"]  #成交量 列表
+    pchg_series = df["PCHG"]  #涨幅 列表
+
     if tag == "A":
         #step.1
-        for i in range(0,fdts):
-            if (vol_series[i] / vol_series[i+1] < 1.0) or (vol_series[i] / vol_series[i+1] > 1.5):#如果最近几天成交量没有持续温和放大，则不满足条件，返回False
+        for i in range(0,ybts):
+            if (vol_series[i] / vol_series[i+1] < 1.0) or (vol_series[i] / vol_series[i+1] > 1.7):#如果最近几天成交量没有持续温和放大，则不满足条件，返回False
                 return False
         # step.2
-        for i in range(0, fdts):
+        for i in range(0, ybts):
             if pchg_series[i] <= 0:  # 如果最近几天价格涨幅没有持续为正，则不满足条件，返回False
                 return False
-
         # step.3
-        for i in range(0, fdts):
-            if pchg_series[i] > 2.0:  # 涨幅过大
+        for i in range(0, ybts):
+            if pchg_series[i] > 3.0:  # 涨幅过大
                 return False
     if tag == "B":
         # step.1
-        for i in range(0, fdts):
+        for i in range(0, ybts):
             if vol_series[i] / vol_series[i + 1] > 1.0:  # 如果最近几天成交量没有持续缩量，则不满足条件，返回False
                 return False
         # step.2
-        for i in range(0, fdts):
+        for i in range(0, ybts):
             if pchg_series[i] > 0:  # 如果最近几天价格涨幅没有持续为负，则不满足条件，返回False
                 return False
 

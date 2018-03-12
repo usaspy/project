@@ -102,13 +102,13 @@ def _1001():
     if request.values.get('action') == 'query':
         match_ls = []
         tag = request.values.get('tag') #
-        fdts = int(request.values.get('_fdts')) #放量天数
+        ybts = int(request.values.get('ybts')) #放量天数
         ls = LISTS.query.all() #统计所有股票个数
 
         tp = ThreadPool(10)  #30个线程处理
         for stock in ls:
             thread = tp.get_thread()
-            t = thread(target=filter_rule_1001, args=(stock, tag, fdts, match_ls,(tp)))
+            t = thread(target=filter_rule_1001, args=(stock, tag, ybts, match_ls,(tp)))
             t.start()
         return render_template('result.html',matchs = match_ls)
 
@@ -173,6 +173,7 @@ def _2001():
             t = thread(target=filter_rule_2001, args=(stock,tag,isStandard,throwBaby,k3up,vol_increase, match_ls, (tp)))
             t.start()
         return render_template('result.html',matchs = match_ls)
+
     return render_template('2001.html')
 
 
@@ -192,6 +193,7 @@ def _2003():
             t = thread(target=filter_rule_2003, args=(stock,tag,no_head, match_ls, (tp)))
             t.start()
         return render_template('result.html',matchs = match_ls)
+
     return render_template('2003.html')
 
 
