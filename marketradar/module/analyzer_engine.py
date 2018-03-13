@@ -159,10 +159,10 @@ def rule_2003(df, tag, no_head):
         if k.HIGH == k.LOW:
             return False
         # 实体和上影线长度不超过总的1/3
-        if k.TCLOSE >= k.TOPEN:
+        if k.PCHG >= 0:
             if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 1.5:
                 return False
-        elif k.TCLOSE < k.TOPEN:
+        elif k.PCHG < 0:
             if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 1.5:
                 return False
 
@@ -182,10 +182,10 @@ def rule_2003(df, tag, no_head):
         if k.HIGH == k.LOW:
             return False
         # 实体和上影线长度不超过总的1/3
-        if k.TCLOSE >= k.TOPEN:
+        if k.PCHG >= 0:
             if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 1.5:
                 return False
-        elif k.TCLOSE < k.TOPEN:
+        elif k.PCHG < 0:
             if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 1.5:
                 return False
         # 5-1天内是否持续下跌
@@ -256,11 +256,7 @@ def __isCrissStar(k):
 #检查是否为刺透形态
 ##通常刺透形态 ka是阴线 kb是阳线， kb刺入越深越好
 def __ctxt(ka,kb):
-    if ka.TCLOSE > ka.TOPEN:
-        p = ka.TOPEN + (ka.TCLOSE-ka.TOPEN)/2
-        if kb.TCLOSE > p:
-            return True
-    if ka.TCLOSE <= ka.TOPEN:
+    if ka.PCHG <= 0 and kb.PCHG > 0:
         p = ka.TCLOSE + (ka.TOPEN-ka.TCLOSE)/2
         if kb.TCLOSE > p:
             return True
