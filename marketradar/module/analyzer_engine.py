@@ -159,10 +159,10 @@ def rule_2003(df, tag, no_head):
         if k.HIGH == k.LOW:
             return False
         # 实体和上影线长度不超过总的1/3
-        if k.PCHG >= 0:
+        if k.TCLOSE >= k.TOPEN:
             if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 1.5:
                 return False
-        elif k.PCHG < 0:
+        elif k.TCLOSE < k.TOPEN:
             if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 1.5:
                 return False
 
@@ -182,10 +182,10 @@ def rule_2003(df, tag, no_head):
         if k.HIGH == k.LOW:
             return False
         # 实体和上影线长度不超过总的1/3
-        if k.PCHG >= 0:
+        if k.TCLOSE > k.TOPEN:
             if (k.HIGH - k.LOW) / (k.TOPEN - k.LOW + 0.00001) > 1.5:
                 return False
-        elif k.PCHG < 0:
+        elif k.TCLOSE < k.TOPEN:
             if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 1.5:
                 return False
         # 5-1天内是否持续下跌
