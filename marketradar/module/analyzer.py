@@ -75,13 +75,13 @@ def filter_rule_1003(stock,ybts,multiple,cxsl,match_ls,*args):
 
 
 #启明星
-def filter_rule_2001(stock, tag,isStandard,throwBaby,k3up,vol_increase, match_ls,*args):
+def filter_rule_2001(stock, tag,throwBaby,k3up,vol_increase, match_ls,*args):
     try:
         if tag == '2d':
             df = __getData(stock.CODE, 2)
         if tag == '3d':
             df = __getData(stock.CODE, 3)
-        if analyzer_engine.rule_2001(df,tag,isStandard,throwBaby,k3up,vol_increase):
+        if analyzer_engine.rule_2001(df,tag,throwBaby,k3up,vol_increase):
             match_ls.append(stock)
     except Exception as e:
         logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))

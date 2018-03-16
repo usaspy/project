@@ -19,7 +19,7 @@
 									<br/>
 									满足启明星的几个基本条件:<br>
 									1)行情经过多日的下跌，K2日出现十字星线（收/开盘价一致）<br>
-									2)K2相对K1的实体必须有向下跳空缺口（另外如果K3相对K2的实体也有向上跳空缺口则更佳）<br>
+									2)K2相对K1的实体必须有向下跳空缺口，另外K3相对K2的实体也有向上跳空缺口<br>
 									3)K1成交量较小，预示下跌势头已经趋缓，K3成交量放大<br>
 
 									<br>
@@ -34,13 +34,11 @@
 							&nbsp;&nbsp;<input type="radio" name="tag" checked value="3d" class="3d" onchange="view_option()"> 昨日出现启明星
 							<br>
 							 <div id ="opt">
-							<input type="checkbox" name="isStandard" checked value="yes">必须是标准十字启明星
+							<input type="checkbox" name="throwBaby" value="yes">必须是"弃婴"形态(K3跳空高开)
 							<br>
-							<input type="checkbox" name="throwBaby" checked　value="yes">必须是"弃婴"形态(K3跳空高开)
+							<input type="checkbox" name="k3up" value="yes">K3日股价大涨(相较K1形成刺透或看涨吞没形态)
 							<br>
-							<input type="checkbox" name="k3up" checked　value="yes">K3日股价大涨(相较K1形成刺透或看涨吞没形态)
-							<br>
-							<input type="checkbox" name="vol_increase" checked value="yes">成交量显著放大(K3与之前K2、K1相比)
+							<input type="checkbox" name="vol_increase" value="yes">成交量显著放大(K3与之前K2、K1相比)
 							<br/>
 							 </div>
 							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
@@ -55,5 +53,17 @@
 			</div>
 		</div>
 		<!-- end #content -->
+	<script>
+		function hidden_option() {
+			document.getElementById("opt").style.display = "none";
+        }
 
+        function view_option() {
+			document.getElementById("opt").style.display = "";
+        }
+
+        function  doit() {
+			document.getElementById("kline_form").submit();
+        }
+	</script>
 	{% endblock %}

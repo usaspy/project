@@ -94,18 +94,18 @@ def rule_1003(df, ybts, multiple, cxsl='true'):
 #1.行情经过多日的下跌，K2日出现十字星线（收/开盘价一致）
 #2.K2相对K1的实体必须有向下跳空缺口（另外如果K3相对K2的实体也有向上跳空缺口则更佳）
 #3.K1成交量较小，预示下跌势头已经趋缓，K3成交量放大
-def rule_2001(df, tag,isStandard,throwBaby,k3up,vol_increase):
+def rule_2001(df, tag,throwBaby,k3up,vol_increase):
     if tag == '2d':
         if df.iloc[:, 0].size != 2:
             return False
         k2 = df.iloc[0] #今天 返回一个series 如果是iloc[0:0]返回的就是dataframe
         k1 = df.iloc[1] #昨天
 
-        # 检查是否有向下跳空缺口
+        # 检查是否K1 K2 实体有向下跳空缺口
         if (k1['TCLOSE'] > k2['TCLOSE'] and k1['TCLOSE'] > k2['TOPEN'] and k1['TOPEN'] > k2['TCLOSE'] and k1['TOPEN'] > k2['TOPEN']) != True:
             return False
 
-        # 检查是否为标准十字星
+        # 检查是否为十字星
         if __isCrissStar(k2) != True:
             return False
         return True
@@ -117,23 +117,22 @@ def rule_2001(df, tag,isStandard,throwBaby,k3up,vol_increase):
         k2 = df.iloc[1]  # 昨天 返回一个series 如果是iloc[0:0]返回的就是dataframe
         k1 = df.iloc[2]  # 前天
 
-        # 检查是否有向下跳空缺口
+        # 检查是否K1 K2 实体有向下跳空缺口
         if (k1['TCLOSE'] > k2['TCLOSE'] and k1['TCLOSE'] > k2['TOPEN'] and k1['TOPEN'] > k2['TCLOSE'] and k1['TOPEN'] > k2['TOPEN']) != True:
             return False
-        #k3日股价是上涨的
-        if (k3['TCLOSE'] > k2['TCLOSE'] and k3['TCLOSE'] > k2['TOPEN']) != True:
+        # 检查是否K2 K3 实体有向上跳空缺口
+        if (k3['TCLOSE'] > k2['TCLOSE'] and k3['TCLOSE'] > k2['TOPEN'] and k3['TOPEN'] > k2['TCLOSE'] and k3['TOPEN'] > k2['TOPEN']) != True:
             return False
         #如果k3日的最低价不能低于k2日的最低价
         if k3.LOW < k2.LOW:
             return False
         # 需要检查是否有向上跳空缺口（弃婴形态）
         if throwBaby == 'yes':
-            if (k3['TCLOSE'] > k2['TCLOSE'] and k3['TCLOSE'] > k2['TOPEN'] and k3['TOPEN'] > k2['TCLOSE'] and k3['TOPEN'] > k2['TOPEN']) != True:
+            if (k3.LOW >=  k2['TCLOSE'] and k3.LOW >= k2['TOPEN']) != True:
                 return False
-        # 需要检查是否为标准十字星
-        if isStandard == 'yes':
-            if __isCrissStar(k2) != True:
-                return False
+        # 检查是否为十字星
+        if __isCrissStar(k2) != True:
+            return False
         # 需要检查K3成交量是否放大
         if vol_increase == 'yes':
             if k3.VOTURNOVER < k1.VOTURNOVER + k2.VOTURNOVER:
@@ -220,7 +219,7 @@ def rule_2004(df, ybts):
     k2 = df.iloc[0]  # 今日
     k1 = df.iloc[1]  # 昨日
     #4
-    if k2.VOTURNOVER < k1.VOTURNOVER * 2: #成交量放大低于2倍
+    if k2.VOTURNOVER < k1.VOTURNOVER * 1.5: #成交量放大低于1.5倍
         return False
     #1
     if __is_continue_fall(df[1:]) != True:
@@ -248,8 +247,8 @@ def __is_continue_fall(df):
 
 #检查是否标准十字星
 def __isCrissStar(k):
-    v = k['TCLOSE'] - k['TOPEN']
-    if abs(v) < 1E-2:
+    v = k['TCLOSE'] / k['TOPEN']
+    if v > 0.997 and v < 1.003:
         return True
     return False
 
