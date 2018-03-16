@@ -33,7 +33,7 @@ def rule_1001(df, tag, ybts):
     if tag == "B":
         # step.1
         for i in range(0, ybts):
-            if vol_series[i] / vol_series[i + 1] > 1.0:  # 如果最近几天成交量没有持续缩量，则不满足条件，返回False
+            if vol_series[i] / vol_series[i + 1] >= 1.0:  # 如果最近几天成交量没有持续缩量，则不满足条件，返回False
                 return False
         # step.2
         for i in range(0, ybts):
