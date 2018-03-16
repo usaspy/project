@@ -216,7 +216,7 @@ def _2004():
 
 
 
-#============================================================势=================================================================
+#============================================================其他功能=================================================================
 
 #[加入/移出收藏夹]
 @app.route('/favorite',methods=['GET'])
@@ -264,6 +264,16 @@ def in_favorite(code):
         if ad.CODE == code and ad.FLAG == 1:
             return "<a href='/favorite?action=cancel&code=" + code + "' target='_blank'><font color=gray>已收藏</font></a>"
     return "<a href='/favorite?action=add&code=" + code + "' target='_blank'>添加收藏</a>"
+
+#定义一个全局函数
+@app.template_global('show_data_time')
+def show_data_time():
+    #return time.strftime("%Y-%m-%d %H:%M:%S", l)
+    ls = db.session.query(DAY_DATAS.DAY).group_by(DAY_DATAS.DAY).order_by(DAY_DATAS.DAY.desc())
+    lss = []
+    for i in ls:
+        lss.append(i.DAY)
+    return lss
 
 if __name__ == '__main__':
     app.run(host=conf.get('web','host'), port=conf.get('web','port'), debug=False)
