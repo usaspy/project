@@ -218,7 +218,7 @@ def _2004():
 
 #============================================================势=================================================================
 
-#[收藏夹]
+#[加入/移出收藏夹]
 @app.route('/favorite',methods=['GET'])
 def favorite():
     code = request.values.get('code')
@@ -239,6 +239,13 @@ def favorite():
             dbpool.executeUpdate(['update __relation set FLAG=1 where CODE=%s'% code])
         return "<script>alert('加入收藏夹成功！')</script>"
     return None
+
+#[收藏夹]
+@app.route('/favorite_list',methods=['GET'])
+def favorite_list():
+    ls = db.session.query(LISTS,RELATION).filter(RELATION.CODE == LISTS.CODE,RELATION.FLAG == 1)
+
+    return render_template('favorite_list.html',ls = ls)
 
 #========================================================COMMON=================================================================
 #定义一个过滤器600168->sh600168
