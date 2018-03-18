@@ -3,7 +3,7 @@
 	<div id="page-container" class=" page-without-sidebar">
 		<!-- begin #content -->
 			<!-- begin page-header -->
-			<h1 class="page-header">连续缩量后的首次放量 / Code=1003 <small></small></h1>
+			<h1 class="page-header">连续缩量后的首次放量拉升 / Code=1003 <small></small></h1>
 			<!-- end page-header -->
 
 			<div class="panel panel-inverse">
@@ -13,18 +13,19 @@
                             <button type="button" class="close" data-dismiss="alert">
                                 <span aria-hidden="true">×</span>
                             </button>
-                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是连续缩量后的首次放量——极限缩量？</h4>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是连续缩量后的首次放量拉升——极限缩量？</h4>
 								<p>
-									此前（样本天数内）成交量持续低迷（若呈现典型的连续缩量形态更好）今日突然开始放量，成交量是前一日的至少<font color="red" size="4">3</font>倍，同时
-									今日成交量是样本天数内的交易均量的至少<font color="red" size="4">2</font>倍
+									此前成交量持续低迷，至少10个交易日以上的换手率不超过x%，今日突然开始放量上涨。其中，成交量是前一日的至少<font color="red" size="4">3</font>倍，同时
+									是样本天数内的交易均量的至少<font color="red" size="4">2</font>倍，涨幅不低于1%
 								</p>
 						</div>
-						<form class="form-horizontal" id="kline_form" method = "POST" action="/1003?action=query" target="result_page">
-							样本天数：	<select class="form-control" name="ybts">
+						<form class="f价格上涨成交orm-horizontal" id="kline_form" method = "POST" action="/1003?action=query" target="result_page">
+							样本天数：(在这期间呈现的是缩量下跌态势)
+											<select class="form-control" name="ybts">
 												<option value="10">10天</option>
 												<option selected value="15">15天</option>
 											</select>
-										<input type="checkbox" name="cxsl" value="">放大前<font color="red" size="4">3</font>日的成交量满足持续缩量形态
+										<input type="checkbox" name="cxsl" value="true">放大前<font color="red" size="4">3</font>日的成交量满足持续缩量形态
 							<br/>
 							今日较昨日放大倍数：	<input type="text" name="multiple" class="form-control" value="3">
 							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>

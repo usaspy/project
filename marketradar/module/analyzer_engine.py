@@ -61,16 +61,19 @@ def rule_1002(df, fdts, multiple):
 #规则：
 #1.计算前一段时间（ybts-1）的成交量均量avg_vol
 #2.过去每一天的成交量都都不会很大，最多只有成交均量avg_vol的2倍
-#3.今日的成交量是昨日的multiple=3倍以上
+#3.今日的成交量是昨日的multiple=3倍以上，且今天收盘价是上涨的
 #4.今日的成交量是前期(ybts-1)成交均量的2倍以上
-#4.T-3,T-2,T-1,三日的成交量呈典型的持续缩量态势
-def rule_1003(df, ybts, multiple, cxsl='true'):
+#5..T-3,T-2,T-1,三日的成交量呈典型的持续缩量态势
+def rule_1003(df, ybts, multiple, cxsl):
     if df.iloc[:,0].size != ybts:
         return False
 
     series = df["VOTURNOVER"]
+    pchg_series = df["PCHG"]  #涨幅 列表
     #step.3
     if series[0]/series[1] < multiple:
+        return False
+    if pchg_series[0] <= 0:
         return False
     #step.1
     avg_vol = series[1:].sum()/(ybts-1)
