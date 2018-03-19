@@ -1,5 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from marketradar import app
+from marketradar import db
+from marketradar.model import *
 from flask import Flask,render_template,session,request
 from datetime import datetime
 from marketradar.config import conf
@@ -15,50 +18,7 @@ from marketradar.utils.threadpool import ThreadPool
 from marketradar.utils import datetimeUtil
 from marketradar.utils import dbpool
 
-app = Flask(__name__,static_folder='webUI/static',template_folder='webUI/templates')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://%s:%s@%s/%s"% (conf.get('db','user'),conf.get('db','pass'),conf.get('db','host'),conf.get('db','database'))
-
-db = SQLAlchemy(app)
-
-class DAY_DATAS(db.Model):
-    __tablename__='DAY_DATAS'
-    ID = db.Column(db.BIGINT,primary_key=True)
-    CODE = db.Column(db.String(8)) #代码
-    NAME = db.Column(db.String(255)) #股票名称
-    TOPEN = db.Column(db.DECIMAL) #开盘价
-    HIGH = db.Column(db.DECIMAL) #最高
-    LOW = db.Column(db.DECIMAL) #最低
-    TCLOSE = db.Column(db.DECIMAL) # 收盘价
-    LCLOSE = db.Column(db.DECIMAL) #前日收盘价
-    CHG = db.Column(db.DECIMAL)  #涨跌额
-    PCHG = db.Column(db.DECIMAL)  #涨跌幅
-    VOTURNOVER = db.Column(db.BIGINT)  #成交量(手)
-    VATURNOVER = db.Column(db.DECIMAL)  #成交金额
-    TCAP = db.Column(db.DECIMAL)  #总市值
-    MCAP = db.Column(db.DECIMAL)  #流通市值
-    DAY = db.Column(db.Date)  #交易日
-    MA5 = db.Column(db.DECIMAL)  #MA5
-    MA10 = db.Column(db.DECIMAL)  #MA10
-    MA20 = db.Column(db.DECIMAL)  #MA20
-    CHANGEHAND = db.Column(db.DECIMAL)  #换手率
-    CREATE_TIME = db.Column(db.DateTime) #采集时间
-
-class LISTS(db.Model):
-    __tablename__ = 'LISTS'
-    CODE = db.Column(db.String(50),primary_key=True)
-    NAME = db.Column(db.String(50))
-
-class TMP_FAILED(db.Model):
-    __tablename__ = 'TMP_FAILED'
-    CODE = db.Column(db.String(50),primary_key=True)
-    NAME = db.Column(db.String(50))
-
-class RELATION(db.Model):
-    __tablename__ = '__RELATION'
-    CODE = db.Column(db.String(50),primary_key=True)
-    FLAG = db.Column(db.String(50))
-    REMARK = db.Column(db.String(50))
 
 
 __RELATION_INFO = RELATION.query.all()
@@ -274,6 +234,3 @@ def show_data_time():
     for i in ls:
         lss.append(i.DAY)
     return lss
-
-if __name__ == '__main__':
-    app.run(host=conf.get('web','host'), port=conf.get('web','port'), debug=False)
