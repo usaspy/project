@@ -14,4 +14,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://%s:%s@%s/%s"% (conf.get('db','u
 
 db = SQLAlchemy(app)
 
-from marketradar.webroute import *
+from marketradar.view import *
