@@ -41,6 +41,7 @@ class DAY_DATAS(db.Model):
     MA5 = db.Column(db.DECIMAL)  #MA5
     MA10 = db.Column(db.DECIMAL)  #MA10
     MA20 = db.Column(db.DECIMAL)  #MA20
+    CHANGEHAND = db.Column(db.DECIMAL)  #换手率
     CREATE_TIME = db.Column(db.DateTime) #采集时间
 
 class LISTS(db.Model):
@@ -137,16 +138,15 @@ def _1002():
 def _1003():
     if request.values.get('action') == 'query':
         match_ls = []
-        ybts = int(request.values.get('ybts')) #样本天数
+        slts = int(request.values.get('_slts')) #缩量天数
         multiple = int(request.values.get('multiple')) #放大倍数
-        cxsl = request.values.get('cxsl') #是否持续缩量
-
+        changehand = float(request.values.get('_changehand'))
         ls = LISTS.query.all()  # 统计所有股票个数
 
         tp = ThreadPool(10)  # 30个线程处理
         for stock in ls:
             thread = tp.get_thread()
-            t = thread(target=filter_rule_1003, args=(stock, ybts,multiple,cxsl, match_ls, (tp)))
+            t = thread(target=filter_rule_1003, args=(stock, slts,multiple,changehand, match_ls, (tp)))
             t.start()
         return render_template('result.html',matchs = match_ls)
 

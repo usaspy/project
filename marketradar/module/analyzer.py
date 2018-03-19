@@ -14,7 +14,7 @@ engine = create_engine("mysql://%s:%s@%s/%s"% (conf.get('db','user'),conf.get('d
 
 #获取市场上所有股票的日数据(系统默认最多保存近120日的交易记录)并保存到dataframe
 def __getAllDayDatas():
-    sql = "select CODE,DAY,TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,MA5,MA10,MA20 from DAY_DATAS order by DAY desc"
+    sql = "select CODE,DAY,TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,MCAP,MA5,MA10,MA20,CHANGEHAND from DAY_DATAS order by DAY desc"
     return pd.read_sql_query(sql,engine)
 
 __ALL_DAY_DATAS = __getAllDayDatas()
@@ -61,10 +61,10 @@ def filter_rule_1002(stock,fdts,multiple,match_ls,*args):
             args[0].add_thread()
 
 #持续缩量后的首次放量
-def filter_rule_1003(stock,ybts,multiple,cxsl,match_ls,*args):
+def filter_rule_1003(stock,slts,multiple,changehand,match_ls,*args):
     try:
-        df = __getData(stock.CODE, int(ybts))
-        if analyzer_engine.rule_1003(df, ybts,multiple,cxsl):
+        df = __getData(stock.CODE, 20)
+        if analyzer_engine.rule_1003(df, slts,multiple,changehand):
             match_ls.append(stock)
     except Exception as e:
         logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))

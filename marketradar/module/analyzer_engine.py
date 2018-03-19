@@ -59,36 +59,34 @@ def rule_1002(df, fdts, multiple):
 
 #[持续缩量后首次放量]
 #规则：
-#1.计算前一段时间（ybts-1）的成交量均量avg_vol
-#2.过去每一天的成交量都都不会很大，最多只有成交均量avg_vol的2倍
-#3.今日的成交量是昨日的multiple=3倍以上，且今天收盘价是上涨的
-#4.今日的成交量是前期(ybts-1)成交均量的2倍以上
-#5..T-3,T-2,T-1,三日的成交量呈典型的持续缩量态势
-def rule_1003(df, ybts, multiple, cxsl):
-    if df.iloc[:,0].size != ybts:
+
+#1.至少有slts天的换手率不高于2%
+#2.今日的成交量是前10天成交均量的multiple=2倍以上
+#3.今日的成交量是昨日的3倍以上，且今天收盘价是上涨的
+def rule_1003(df, slts, multiple,changehand):
+    if df.iloc[:,0].size != 20:
         return False
 
     series = df["VOTURNOVER"]
     pchg_series = df["PCHG"]  #涨幅 列表
     #step.3
-    if series[0]/series[1] < multiple:
+    if series[0]/series[1] < 3:
         return False
     if pchg_series[0] <= 0:
         return False
-    #step.1
-    avg_vol = series[1:].sum()/(ybts-1)
     #step.2
-    for i in series[1:]:
-        if i / avg_vol > 2:
-            return False
-    # step.4
-    if series[0]/avg_vol < 2:
+    avg_vol = series[1:11].sum()/10
+    if series[0]/avg_vol < multiple:
         return False
-    # step.5
-    if cxsl == 'true':
-        for i in range(1, 4):
-            if series[i] > series[i+1]: #若没有持续缩量，则不满足条件
-                return False
+    #step.1
+    count = 0
+    for i in range(1,20):
+        _changehand = df.iloc[i].CHANGEHAND
+        if  _changehand <= changehand:  #当日换手率不超过2%
+            count += 1
+    if count < slts:
+        return False
+
     return True
 
 #[启明星/十字启明星# ]
