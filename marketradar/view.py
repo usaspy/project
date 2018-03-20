@@ -20,7 +20,7 @@ from marketradar.utils import dbpool
 
 
 
-
+#加载所有关联收藏的股票
 __RELATION_INFO = RELATION.query.all()
 print(__RELATION_INFO)
 
