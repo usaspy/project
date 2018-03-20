@@ -167,6 +167,13 @@ def __generate_MA_5_10_20(code,day,*args):
         if args and isinstance(args[0],ThreadPool): #如果第一个参数是线程池，则执行添加新线程操作
             args[0].add_thread()
 
+#计算个股当日的换手率
+def cal_CHANGEHAND(day):
+    try:
+        dbpool.executeUpdate(["update DAY_DATAS set CHANGEHAND = VOTURNOVER/(MCAP/TCLOSE)*100 where DAY='%s'" % (day)])
+    except Exception as e:
+        logger.exception("计算换手率出错 >> ")
+
 
 if __name__ == '__main__':
     #collect_theOne('000971','20160808','20160808')
