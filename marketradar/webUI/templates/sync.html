@@ -55,14 +55,15 @@
 			        </p>
 					<br/>
 					<p>
-			            4）生成当日的移动平均线-MA(5,10,20)&nbsp;&nbsp;&nbsp;
+			            4）生成当日的移动平均线-MA(5,10,20)和换手率&nbsp;&nbsp;&nbsp;
 						<div class="col-md-4">
 						<label><input type="checkbox" name="mincheck[]" checked value="bar" data-parsley-multiple="mincheck" data-parsley-id="7380"> MA5</label>
 						<label><input type="checkbox" name="mincheck[]" checked value="bar" data-parsley-multiple="mincheck" data-parsley-id="7380"> MA10</label>
 						<label><input type="checkbox" name="mincheck[]" checked value="bar" data-parsley-multiple="mincheck" data-parsley-id="7380"> MA20</label>
+						<label><input type="checkbox" name="mincheck[]" checked value="bar" data-parsley-multiple="mincheck" data-parsley-id="7380"> 换手率</label>
 						<input type="text" class="form-control" id="_theday3" placeholder="Select Date" value="04/01/2018">
 						</div>
-						<button type="button" onclick="generate_MA()" class="btn btn-danger m-r-5 m-b-5">生成</button>&nbsp;&nbsp;
+						<button type="button" onclick="_cal_()" class="btn btn-danger m-r-5 m-b-5">开始计算</button>&nbsp;&nbsp;
 
 			        </p>
 			    </div>
@@ -92,10 +93,10 @@
                 window.location.href = "/sync?action=retry_sync&day=" + day;
             }
         }
-        function generate_MA() {
+        function _cal_() {
             if (confirm("执行？")) {
                 day = document.getElementById("_theday3").value;
-                window.location.href = "/sync?action=generate_ma&day=" + day;
+                window.location.href = "/sync?action=_cal_&day=" + day;
             }
         }
 	</script>

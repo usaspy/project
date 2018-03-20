@@ -47,10 +47,11 @@ def sync():
         dayString = request.values.get("day")
         collector.generate_today_remain(datetimeUtil.dateFormat2Format(dayString,'%m/%d/%Y','%Y%m%d'))
         msg = "补录完成！"
-    if request.values.get('action') == 'generate_ma':
+    if request.values.get('action') == '_cal_':
         dayString = request.values.get("day")
         collector.generate_ma(datetimeUtil.dateFormat2Format(dayString,'%m/%d/%Y','%Y-%m-%d'))
-        msg = "%s的股票移动平均线MA5、MA10、MA20生成完成！"
+        collector.cal_CHANGEHAND(datetimeUtil.dateFormat2Format(dayString,'%m/%d/%Y','%Y-%m-%d'))
+        msg = "股票移动平均线MA5、MA10、MA20、当日换手率计算完成！"
 
     ls = LISTS.query.all()  #统计所有股票个数
     session_failed_codes = TMP_FAILED.query.all()  #统计失败股票个数
