@@ -188,7 +188,7 @@ def _2004():
     return render_template('2004.html')
 
 
-#[2005-缺口 ]
+#[2005-缺口]
 @app.route('/2005',methods=['GET','POST'])
 def _2005():
     if request.values.get('action') == 'query':

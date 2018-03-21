@@ -263,7 +263,7 @@ def rule_2005(df, optionsRadios):
                 #print(df.iloc[i].LOW)
                 #print(df.iloc[i+1].HIGH)
                 print((LOWS.min()))
-                if LOWS.min() > df.iloc[i+1].HIGH * 0.99:
+                if LOWS.min() > df.iloc[i+1].HIGH:
                     if df.iloc[0].LOW  <  df.iloc[i+1].HIGH * 1.01:
                         return True
                 return False
