@@ -89,6 +89,20 @@ def rule_1003(df, slts, multiple,changehand):
 
     return True
 
+#[换手率选股]
+#规则：
+#1.确定fdts放大天数
+#2.放大天数内每日成交量至少是放大前一日的multiple=7倍
+def rule_1004(df, ybts, changehand):
+    if df.iloc[:,0].size != ybts:
+        return False
+
+    series = df["CHANGEHAND"]
+    #step.2
+    if series[0:ybts].sum() < changehand:
+        return False
+    return True
+
 #[启明星/十字启明星# ]
 #规则：
 #满足启明星的几个基本条件:
@@ -227,6 +241,34 @@ def rule_2004(df, ybts):
         return False
 
     return __kztmxt(k1,k2)
+
+
+#[缺口]
+def rule_2005(df, optionsRadios):
+    if df.iloc[:, 0].size != 20:
+        return False
+
+    if optionsRadios == '_A':
+        k2 = df.iloc[0]  # 今日
+        k1 = df.iloc[1]  # 昨日
+
+        if k2.LOW > k1.HIGH:
+            return True
+    if optionsRadios == '_B':
+        for i in range(0, 20-1):
+            if df.iloc[i].LOW > df.iloc[i+1].HIGH and i > 0:
+                LOWS = np.array(df.iloc[0:i].LOW)
+                print(df.iloc[0].CODE)
+                print(df.iloc[i].DAY)
+                #print(df.iloc[i].LOW)
+                #print(df.iloc[i+1].HIGH)
+                print((LOWS.min()))
+                if LOWS.min() > df.iloc[i+1].HIGH * 0.99:
+                    if df.iloc[0].LOW  <  df.iloc[i+1].HIGH * 1.01:
+                        return True
+                return False
+
+    return False
 
 
 # 检查是否持续下跌

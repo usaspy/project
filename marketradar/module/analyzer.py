@@ -73,6 +73,18 @@ def filter_rule_1003(stock,slts,multiple,changehand,match_ls,*args):
         if args and isinstance(args[0], ThreadPool):  # 如果第一个参数是线程池，则执行添加新线程操作
             args[0].add_thread()
 
+# 持续缩量后的首次放量
+def filter_rule_1004(stock, ybts, changehand, match_ls, *args):
+    try:
+                df = __getData(stock.CODE, ybts)
+                if analyzer_engine.rule_1004(df, ybts, changehand):
+                    match_ls.append(stock)
+    except Exception as e:
+                logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))
+                logger.exception(e)
+    finally:
+                if args and isinstance(args[0], ThreadPool):  # 如果第一个参数是线程池，则执行添加新线程操作
+                    args[0].add_thread()
 
 #启明星
 def filter_rule_2001(stock, tag,throwBaby,k3up,vol_increase, match_ls,*args):
@@ -118,6 +130,19 @@ def filter_rule_2004(stock, ybts, match_ls,*args):
         if args and isinstance(args[0], ThreadPool):  # 如果第一个参数是线程池，则执行添加新线程操作
             args[0].add_thread()
 
+#缺口
+def filter_rule_2005(stock, optionsRadios, match_ls,*args):
+    try:
+        df = __getData(stock.CODE, 20)
+        if analyzer_engine.rule_2005(df,optionsRadios):
+            match_ls.append(stock)
+        return False
+    except Exception as e:
+        logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))
+        logger.exception(e)
+    finally:
+        if args and isinstance(args[0], ThreadPool):  # 如果第一个参数是线程池，则执行添加新线程操作
+            args[0].add_thread()
 
 if __name__ == "__main__":
    # print(getDayDatasByPeriod('000001',30))

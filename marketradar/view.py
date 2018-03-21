@@ -7,12 +7,7 @@ from flask import Flask,render_template,session,request
 from datetime import datetime
 from marketradar.config import conf
 from marketradar.module import analyzer
-from marketradar.module.analyzer import  filter_rule_1001
-from marketradar.module.analyzer import  filter_rule_1002
-from marketradar.module.analyzer import  filter_rule_1003
-from marketradar.module.analyzer import  filter_rule_2001
-from marketradar.module.analyzer import  filter_rule_2003
-from marketradar.module.analyzer import  filter_rule_2004
+from marketradar.module.analyzer import  *
 from marketradar.module import collector
 from marketradar.utils.threadpool import ThreadPool
 from marketradar.utils import datetimeUtil
@@ -113,6 +108,23 @@ def _1003():
 
     return render_template('1003.html')
 
+#[1004-换手率选股]
+@app.route('/1004',methods=['GET','POST'])
+def _1004():
+    if request.values.get('action') == 'query':
+        match_ls = []
+        ybts = int(request.values.get('ybts')) #样本天数
+        changehand = float(request.values.get('_changehand')) #总换手率
+        ls = LISTS.query.all()  # 统计所有股票个数
+
+        tp = ThreadPool(10)  # 30个线程处理
+        for stock in ls:
+            thread = tp.get_thread()
+            t = thread(target=filter_rule_1004, args=(stock, ybts,changehand, match_ls, (tp)))
+            t.start()
+        return render_template('result.html',matchs = match_ls)
+
+    return render_template('1004.html')
 
 #============================================================价=================================================================
 #[2001-十字启明星]
@@ -176,7 +188,22 @@ def _2004():
     return render_template('2004.html')
 
 
+#[2005-缺口 ]
+@app.route('/2005',methods=['GET','POST'])
+def _2005():
+    if request.values.get('action') == 'query':
+        match_ls = []
+        optionsRadios = request.values.get('optionsRadios') # 样本天数
 
+        ls = LISTS.query.all()  # 统计所有股票个数
+
+        tp = ThreadPool(10)  # 30个线程处理
+        for stock in ls:
+            thread = tp.get_thread()
+            t = thread(target=filter_rule_2005, args=(stock,optionsRadios, match_ls, (tp)))
+            t.start()
+        return render_template('result.html',matchs = match_ls)
+    return render_template('2005.html')
 #============================================================其他功能=================================================================
 
 #[加入/移出收藏夹]
@@ -188,7 +215,7 @@ def favorite():
         #dbpool.executeUpdate(['update __relation set FLAG=0 where CODE=%s'% code])
         db.session.query(RELATION).filter(RELATION.CODE == code).update({RELATION.FLAG : 0})
         db.session.commit()
-        return "<script>alert('取消收藏成功！')</script>"
+        return "<script>alert('取消收藏成功！');window.close();</script>"
     elif action == 'add':
         #RELATION.filter_by(CODE=code).update({RELATION.FLAG: '1'})
         r = RELATION.query.filter_by(CODE=code).first()
@@ -198,7 +225,7 @@ def favorite():
             db.session.commit()
         else:
             dbpool.executeUpdate(['update __relation set FLAG=1 where CODE=%s'% code])
-        return "<script>alert('加入收藏夹成功！')</script>"
+        return "<script>alert('加入收藏夹成功！');window.close();</script>"
     return None
 
 #[收藏夹]

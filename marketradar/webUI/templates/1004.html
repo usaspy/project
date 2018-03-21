@@ -1,0 +1,56 @@
+	{% extends "_refer_.html" %}
+	{% block body %}
+	<div id="page-container" class=" page-without-sidebar">
+		<!-- begin #content -->
+			<!-- begin page-header -->
+			<h1 class="page-header">换手率选股 / Code=1004 <small></small></h1>
+			<!-- end page-header -->
+
+			<div class="panel panel-inverse">
+			    <div class="panel-body">
+					<div class="col-md-5">
+						<div class="alert alert-info fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是换手率？</h4>
+								<p>
+									换手率是一个很重要的指标，实际效果比成交量更客观，通常<3%时说明不受市场关注，成交清淡，>7%则意味着成交活跃，换手频繁，只有通过充分换手，股票才能上涨，不然上涨容易引发抛盘。
+									<br>
+									1.通常低位换手率较大多半是主力在吸筹，高位大则可能是在派发，如果在高位换手不高，说明可能主力还不打算在此价位出货，有机会再创新高。
+									<br>
+									2.拉升时如果一只股票当天换手率超过10%(新股或刚上市不久的股票除外)通常表明主力在盘中开始动作。当然还要根据之前2周之内平均换手率来看，如果突破平均换手率2倍以上，那么主力资金在出入是准确无误的。
+									<br>
+									3.如果拉升时换手不高，可能筹码都集中在主力手中，后市会很好拉，越是底部换手充分， 上行中的抛压越轻。
+									<br>
+									<b>4. 换手率异常时，首先查看当日哪些资金在进出</b>
+								</p>
+						</div>
+						<form class="form-horizontal" id="kline_form" method = "POST" action="/1004?action=query" target="result_page">
+							样本天数
+											<select class="form-control" name="ybts">
+												<option  value="5">5天</option>
+												<option selected value="10">10天</option>
+												<option selected value="20">20天</option>
+											</select>
+							的换手率累计超过
+											<select class="form-control" name="_changehand">
+												<option  value="25">25%</option>
+												<option  value="50">50%</option>
+												<option selected value="100">100%</option>
+											</select>
+							<br/>
+							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+						</form>
+					</div>
+					<div class="col-md-7">
+						<h3 class="page-header">匹配结果</h3>
+
+						<iframe name="result_page" align="center" width="100%" height="450" src="" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+					</div>
+			    </div>
+			</div>
+		</div>
+		<!-- end #content -->
+
+	{% endblock %}
