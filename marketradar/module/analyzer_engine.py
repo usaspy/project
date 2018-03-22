@@ -256,17 +256,18 @@ def rule_2005(df, optionsRadios):
             return True
     if optionsRadios == '_B':
         for i in range(0, 20-1):
-            if df.iloc[i].LOW > df.iloc[i+1].HIGH and i > 0:
+            if df.iloc[i].LOW > df.iloc[i+1].HIGH and i > 0:  #找到向上跳空缺口，并且不是今日缺口
                 LOWS = np.array(df.iloc[0:i].LOW)
-                print(df.iloc[0].CODE)
-                print(df.iloc[i].DAY)
+                #print(df.iloc[0].CODE)
+                #print(df.iloc[i].DAY)
                 #print(df.iloc[i].LOW)
                 #print(df.iloc[i+1].HIGH)
-                print((LOWS.min()))
-                if LOWS.min() > df.iloc[i+1].HIGH:
-                    if df.iloc[0].LOW  <  df.iloc[i+1].HIGH * 1.01:
+                #print((LOWS.min()))
+                if LOWS.min() > df.iloc[i+1].HIGH:    #如果后面几个交易日缺口始终没有没有完全补上
+                    if df.iloc[0].LOW  <  df.iloc[i+1].HIGH * 1.01: #今日收盘价格已经接近缺口位置，涨幅小于1%
                         return True
-                return False
+                else:
+                    continue    #找下一个缺口
 
     return False
 
