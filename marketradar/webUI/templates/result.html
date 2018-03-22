@@ -18,7 +18,7 @@
 											<tr class="gradeA odd" role="row">
 												 <td class="sorting_1" colspan="4">没有数据</td>
 											</tr>
-									  	{% endif %}
+									  	{% else %}
                                     	<tr class="gradeA odd" role="row">
                                             <td class="sorting_1">{{loop.index}}</td>
 											<td><a href="#" onclick="javascript:window.open('http://image.sinajs.cn/newchart/daily/n/{{ stock.CODE | code_prefix }}.gif')">{{stock.CODE}}</a></td>
@@ -28,6 +28,7 @@
 												<a href="#" onclick="javascript:window.open('/remarket')">备注</a>
 											</td>
                                         </tr>
+										{% endif %}
                    		 			{% endfor %}
 									</tbody>
                                 </table>

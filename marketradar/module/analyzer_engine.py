@@ -271,6 +271,17 @@ def rule_2005(df, optionsRadios):
 
     return False
 
+#[上行三法]
+def rule_2006(df, optionsRadios):
+    if df.iloc[:, 0].size != 20:
+        return False
+
+    if optionsRadios == '_A':
+        pass
+    if optionsRadios == '_B':
+        pass
+
+    return False
 
 # 检查是否持续下跌
 def __is_continue_fall(df):
