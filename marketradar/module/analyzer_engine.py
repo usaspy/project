@@ -273,14 +273,17 @@ def rule_2005(df, optionsRadios):
 
 #[上行三法]
 def rule_2006(df, optionsRadios):
-    if df.iloc[:, 0].size != 20:
+    if df.iloc[:, 0].size != 4:
         return False
 
-    if optionsRadios == '_A':
-        pass
-    if optionsRadios == '_B':
-        pass
-
+    k0 = df.iloc[3]
+    if (k0.TCLOSE - k0.TOPEN)/k0.TOPEN > 0.04:
+        for i in range(0, 3):
+            if df.iloc[i].TCLOSE > k0.LOW and df.iloc[i].TCLOSE < k0.HIGH and df.iloc[i].TOPEN > k0.LOW and df.iloc[i].TOPEN < k0.HIGH:
+                continue
+            else:
+                return False
+        return True
     return False
 
 # 检查是否持续下跌

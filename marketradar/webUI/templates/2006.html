@@ -20,18 +20,14 @@
 				<br>
 
 				<strong>提示:</strong> <br>
-					1) 一根大阳柱(至少4%的涨幅<br>
-					2)后续的两到三天一直缩量小阴调整，且实体落在大阳柱的高低区间<br>
-					3)至少两天，最多三天<br>
+					1) 一根大阳柱（至少4%的涨幅）<br>
+					2)后面至少有三天一直都是缩量调整，且K线实体基本都落在大阳柱的高低区间内<br>
+					3)调整之后又出现一根大阳柱，开盘价高于前一天收盘价，收盘价高于前一根大阳柱的收盘价<br>
 					4)三法其实与“三角形整理”“楔形整理”有共同的特点<br>
 				 </div>
 						</div>
-						 <form class="form-horizontal" id="kline_form" method = "POST" action="/2005?action=query" target="result_page">
-							<input type="radio" name="optionsRadios" value="_A" checked="">连续出现二根调整小柱
-							<br>
-							 <input type="radio" name="optionsRadios" value="_B" checked="">连续出现三根调整小柱
-							<br>
-							 <input type="radio" name="optionsRadios" value="_C" checked="">调整之后再次出现大阳柱
+						 <form class="form-horizontal" id="kline_form" method = "POST" action="/2006?action=query" target="result_page">
+							<!-- <input type="checkbox" name="optionsRadios" value="_B" >又出现一根大阳柱-->
 							<br>
 							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 						 </form>
