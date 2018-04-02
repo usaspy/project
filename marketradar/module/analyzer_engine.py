@@ -273,18 +273,35 @@ def rule_2005(df, optionsRadios):
 
 #[上行三法]
 def rule_2006(df, optionsRadios):
-    if df.iloc[:, 0].size != 4:
+    if df.iloc[:, 0].size != 5:
         return False
 
-    k0 = df.iloc[3]
-    if (k0.TCLOSE - k0.TOPEN)/k0.TOPEN > 0.04:
-        for i in range(0, 3):
-            if df.iloc[i].TCLOSE > k0.LOW and df.iloc[i].TCLOSE < k0.HIGH and df.iloc[i].TOPEN > k0.LOW and df.iloc[i].TOPEN < k0.HIGH:
+    k = df.iloc[4]
+    if (k.TCLOSE - k.TOPEN)/k.TOPEN > 0.04:
+        for i in range(1, 4):
+            if df.iloc[i].TCLOSE > k.LOW and df.iloc[i].TCLOSE < k.HIGH and df.iloc[i].TOPEN > k.LOW and df.iloc[i].TOPEN < k.HIGH:
                 continue
             else:
                 return False
+        k5 = df.iloc[0]
+        if k5.PCHG > 2:   #第五天是个上涨日，（最好是开盘高，收盘涨幅大）
+            return True
+    return False
+
+
+#[底部选股]
+def rule_4001(df, optionsRadios):
+    if df.iloc[:, 0].size != optionsRadios:
+        return False
+
+    LOWS = np.array(df.iloc[0:optionsRadios-1].LOW)
+
+    min = LOWS.min()
+
+    if df.iloc[0].LOW > min and (df.iloc[0].LOW - min) / min < 0.03:
         return True
     return False
+
 
 # 检查是否持续下跌
 def __is_continue_fall(df):
