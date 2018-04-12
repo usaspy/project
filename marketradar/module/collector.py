@@ -51,7 +51,7 @@ def generate_today(day):
     lists = dbpool.executeQuery("select CODE,NAME from LISTS")
     for i in lists:
         thread = tp.get_thread()
-        t = thread(target=__collect_One,args=(i[0],i[1],day,day,(tp)))
+        t = thread(target=__collect_Two,args=(i[0],i[1],day,day,(tp)))
         t.start()
 
 # 采集失败的代码执行重采，直到所有都采集成功结束
@@ -65,7 +65,7 @@ def generate_today_remain(day):
         logger.info("有%s个股票需要重采"% len(lists))
         for i in lists:
             thread = tp.get_thread()
-            t = thread(target=__collect_One, args=(i[0], i[1], day, day, (tp)))
+            t = thread(target=__collect_Two, args=(i[0], i[1], day, day, (tp)))
             t.start()
 
 #采集指定交易日的股票交易数据
@@ -84,7 +84,7 @@ def __collect_One(code,name,sday,eday,*args):
 
     req = urllib.request.Request(url,headers=headers)
     try:
-        with urllib.request.urlopen(req,timeout=15) as resp:
+        with urllib.request.urlopen(req,timeout=5) as resp:
             content = resp.read().decode('gb18030')
             data = content.split("\r\n")
             data.remove(data[0])
@@ -97,6 +97,40 @@ def __collect_One(code,name,sday,eday,*args):
                 data_sqls.append("insert into DAY_DATAS(CODE,NAME,TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,VATURNOVER,TCAP,MCAP,DAY,CREATE_TIME) VALUES"
                                  "('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',now())" %
                                  (code,name,x[6],x[4],x[5],x[3],x[7],x[8],x[9],x[11],x[10],x[12],x[13],x[14],x[0]))
+
+            dbpool.executeUpdate(data_sqls)
+    except Exception as e:
+        logger.exception("采集股票[%s-%s]交易数据时出错 >> " % (code, name))
+        logger.exception(e)
+        __failed_one(code, name)
+    finally:
+        if args and isinstance(args[0],ThreadPool): #如果第一个参数是线程池，则执行添加新线程操作
+            args[0].add_thread()
+
+#采集指定交易日的股票交易数据-02接口
+#http://q.stock.sohu.com/hisHq?code=cn_000001&start=20180401&end=20180412&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp
+#上面接口经常出现采集不到值的情况
+def __collect_Two(code,name,sday,eday,*args):
+    data_sqls=[]
+    url = "http://q.stock.sohu.com/hisHq?code=cn_%s&start=%s&end=%s&stat=1&order=D&period=d&callback=historySearchHandler&rt=jsonp" % (code, sday, eday)
+    headers = {'Accept': '*/*',
+               'Referer': 'http://www.huawa.com/orders',
+               'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
+               }
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req,timeout=5) as resp:
+            content = resp.read().decode('gb18030')
+            print(content)
+            i = content.find('[[')
+            if i < 0: return  #当天没有数据
+            ii = content.find(']]')
+            s = content[i + 2:ii].replace('"', '').replace('%', '')
+            ls = s.split(",")
+            data_sqls.append(
+                "insert into DAY_DATAS(CODE,NAME,TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,VATURNOVER,TCAP,MCAP,DAY,CREATE_TIME) VALUES"
+                "('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',now())" %
+                (code, name, ls[1], ls[6], ls[5], ls[2], 0, ls[3], ls[4], ls[7], ls[9], ls[8], 0, 0, ls[0]))
 
             dbpool.executeUpdate(data_sqls)
     except Exception as e:
@@ -180,4 +214,7 @@ if __name__ == '__main__':
     #generate_lists()
     #generate_history('20180201','20180201')
     #generate_today('20180201')
-    generate_today('20180201')
+    #generate_today('20180201')
+    collect_One2('000001','平安银行','20180411','20180411')
+
+

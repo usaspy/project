@@ -14,6 +14,7 @@ class DAY_DATAS(db.Model):
     PCHG = db.Column(db.DECIMAL)  #涨跌幅
     VOTURNOVER = db.Column(db.BIGINT)  #成交量(手)
     VATURNOVER = db.Column(db.DECIMAL)  #成交金额
+    TURNOVER = db.Column(db.DECIMAL)  #换手率
     TCAP = db.Column(db.DECIMAL)  #总市值
     MCAP = db.Column(db.DECIMAL)  #流通市值
     DAY = db.Column(db.Date)  #交易日
