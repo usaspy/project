@@ -5,7 +5,7 @@ import os
 import configparser
 
 conf = configparser.ConfigParser()
-conf.read("D:\config.ini")
+conf.read("config.ini")
 
 if __name__ == '__main__':
     print(conf.getint('db',"port"))
