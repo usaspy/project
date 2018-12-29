@@ -10,7 +10,7 @@ from marketradar.utils.Exception import FilterError
 from datetime import datetime
 import numpy as np
 
-engine = create_engine("mysql://%s:%s@%s/%s"% (conf.get('db','user'),conf.get('db','pass'),conf.get('db','host'),conf.get('db','database')))
+engine = create_engine("mysql://%s:%s@%s/%s"% (conf.get('MYSQL','user'),conf.get('MYSQL','password'),conf.get('MYSQL','host'),conf.get('MYSQL','dbName')))
 
 #获取市场上所有股票的日数据(系统默认最多保存近120日的交易记录)并保存到dataframe
 def __getAllDayDatas():

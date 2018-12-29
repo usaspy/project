@@ -5,9 +5,9 @@ import os
 import configparser
 
 conf = configparser.ConfigParser()
-conf.read("config.ini")
+conf.read("d:/config.ini")
 
 if __name__ == '__main__':
-    print(conf.getint('db',"port"))
-    print(conf.get("db","host"))
-    print(conf.get("db","database"))
+    print(conf.getint('MYSQL',"port"))
+    print(conf.get("MYSQL","host"))
+    print(conf.get("MYSQL","dbName"))
