@@ -172,7 +172,7 @@ def generate_ma(day):
         t = thread(target=__generate_MA_5_10_20,args=(i[0],day,(tp)))
         t.start()
 
-engine = create_engine("mysql://%s:%s@%s/%s"% (conf.get('db','user'),conf.get('db','pass'),conf.get('db','host'),conf.get('db','database')))
+engine = create_engine("mysql://%s:%s@%s/%s"% (conf.get('MYSQL','user'),conf.get('MYSQL','password'),conf.get('MYSQL','host'),conf.get('MYSQL','dbName')))
 
 def __generate_MA_5_10_20(code,day,*args):
     try:
