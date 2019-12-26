@@ -31,8 +31,8 @@ class LISTS(db.Model):
 
 class TMP_FAILED(db.Model):
     __tablename__ = 'TMP_FAILED'
-    CODE = db.Column(db.String(50),primary_key=True)
-    NAME = db.Column(db.String(50))
+    F_CODE = db.Column(db.String(50),primary_key=True)
+    F_NAME = db.Column(db.String(50))
 
 class RELATION(db.Model):
     __tablename__ = '__RELATION'
