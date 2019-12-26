@@ -58,7 +58,7 @@ def generate_today(day):
 def generate_today_remain(day):
     tp = ThreadPool(5)
     while True:
-        lists = dbpool.executeQuery("select CODE,NAME from TMP_FAILED;truncate table TMP_FAILED")
+        lists = dbpool.executeQuery("select F_CODE,F_NAME from TMP_FAILED;truncate table TMP_FAILED")
         if len(lists) == 0:
             logger.info("采集完成!")
             break
@@ -76,6 +76,8 @@ def __collect_One(code,name,sday,eday,*args):
         _code = "1" + code
     if code[0:2] == '60':
         _code = "0" + code
+    if code[0:2] == '30':
+        _code = "1" + code
     url = "http://quotes.money.163.com/service/chddata.html?code=%s&start=%s&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP"% (_code,sday,eday)
     headers = {'Accept': '*/*',
                'Referer': 'http://www.huawa.com/orders',
@@ -142,7 +144,7 @@ def __collect_Two(code,name,sday,eday,*args):
 
 #采集入库时，如果报错，记录该股票代码，后续重采
 def __failed_one(code,name):
-    dbpool.executeUpdate(["insert into TMP_FAILED(CODE,NAME) VALUES ('%s','%s')"%(code,name)])
+    dbpool.executeUpdate(["insert into TMP_FAILED(F_CODE,F_NAME) VALUES ('%s','%s')"%(code,name)])
 
 
 def clear_lists():
@@ -165,12 +167,9 @@ def clear_tmp_failed():
 
 #生成当日的MA5，10，20
 def generate_ma(day):
-    tp = ThreadPool(20)
     lists = dbpool.executeQuery("select CODE,NAME from LISTS")
     for i in lists:
-        thread = tp.get_thread()
-        t = thread(target=__generate_MA_5_10_20,args=(i[0],day,(tp)))
-        t.start()
+        __generate_MA_5_10_20(i[0],day,None)
 
 engine = create_engine("mysql://%s:%s@%s/%s"% (conf.get('MYSQL','user'),conf.get('MYSQL','password'),conf.get('MYSQL','host'),conf.get('MYSQL','dbName')))
 
