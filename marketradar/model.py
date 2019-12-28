@@ -39,3 +39,4 @@ class RELATION(db.Model):
     CODE = db.Column(db.String(50),primary_key=True)
     FLAG = db.Column(db.String(50))
     REMARK = db.Column(db.String(50))
+    FAVORITE_TIME = db.Column(db.DateTime) #采集时间

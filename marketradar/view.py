@@ -245,25 +245,25 @@ def favorite():
     action = request.values.get('action')
     if action == 'cancel':
         #dbpool.executeUpdate(['update __relation set FLAG=0 where CODE=%s'% code])
-        db.session.query(RELATION).filter(RELATION.CODE == code).update({RELATION.FLAG : 0})
+        db.session.query(RELATION).filter(RELATION.CODE == code).update({RELATION.FLAG : 0-RELATION.FLAG})
         db.session.commit()
         return "<script>alert('取消收藏成功！');window.close();</script>"
     elif action == 'add':
         #RELATION.filter_by(CODE=code).update({RELATION.FLAG: '1'})
         r = RELATION.query.filter_by(CODE=code).first()
         if r == None:
-            r = RELATION(CODE=code, FLAG=1, REMARK='')
+            r = RELATION(CODE=code, FLAG=1, REMARK='',FAVORITE_TIME=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             db.session.add(r)
             db.session.commit()
         else:
-            dbpool.executeUpdate(['update __relation set FLAG=1 where CODE=%s'% code])
+            dbpool.executeUpdate(['update __relation set FLAG=abs(FLAG)+1 where CODE=%s'% code])
         return "<script>alert('加入收藏夹成功！');window.close();</script>"
     return None
 
 #[收藏夹]
 @app.route('/favorite_list',methods=['GET'])
 def favorite_list():
-    ls = db.session.query(LISTS,RELATION).filter(RELATION.CODE == LISTS.CODE,RELATION.FLAG == 1)
+    ls = db.session.query(LISTS,RELATION).filter(RELATION.CODE == LISTS.CODE,RELATION.FLAG > 0)
 
     return render_template('favorite_list.html',ls = ls)
 
