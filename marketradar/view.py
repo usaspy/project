@@ -1,7 +1,7 @@
 from marketradar import app
 from marketradar import db
 from marketradar.model import *
-from flask import Flask,render_template,session,request
+from flask import Flask, render_template, session, request, redirect, url_for
 from marketradar.module.analyzer import  *
 from marketradar.module import collector
 from marketradar.utils.threadpool import ThreadPool
@@ -252,7 +252,7 @@ def favorite():
         #RELATION.filter_by(CODE=code).update({RELATION.FLAG: '1'})
         r = RELATION.query.filter_by(CODE=code).first()
         if r == None:
-            r = RELATION(CODE=code, FLAG=1, REMARK='',FAVORITE_TIME=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            r = RELATION(CODE=code, FLAG=1, REMARK='',FAVORITE_TIME=datetime.now().strftime("%Y-%m-%d"))
             db.session.add(r)
             db.session.commit()
         else:
@@ -266,6 +266,16 @@ def favorite_list():
     ls = db.session.query(LISTS,RELATION).filter(RELATION.CODE == LISTS.CODE,RELATION.FLAG > 0)
 
     return render_template('favorite_list.html',ls = ls)
+
+#[设置备注]
+@app.route('/set_remark',methods=['POST'])
+def set_remark():
+    remark = request.values.get('remark')
+    code = request.values.get('code')
+
+    dbpool.executeUpdate(["update __RELATION set REMARK = '%s' where CODE='%s'" % (remark, code)])
+
+    return redirect(url_for('favorite_list'))
 
 #========================================================COMMON=================================================================
 #定义一个过滤器600168->sh600168
