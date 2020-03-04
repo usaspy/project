@@ -76,6 +76,8 @@ def __collect_One(code,name,sday,eday,*args):
         _code = "1" + code
     if code[0:2] == '60':
         _code = "0" + code
+    if code[0:2] == '68':
+        _code = "0" + code
     if code[0:2] == '30':
         _code = "1" + code
     url = "http://quotes.money.163.com/service/chddata.html?code=%s&start=%s&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP"% (_code,sday,eday)
