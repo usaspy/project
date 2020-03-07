@@ -285,6 +285,10 @@ def code_prefix(code):
         _code = "sz" + code
     if code[0:2] == '60':
         _code = "sh" + code
+    if code[0:2] == '68':
+        _code = "sh" + code
+    if code[0:2] == '30':
+        _code = "sz" + code
     return _code
 
 #定义一个过滤器 添加收藏
