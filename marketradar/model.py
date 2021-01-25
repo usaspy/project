@@ -26,7 +26,7 @@ class DAY_DATAS(db.Model):
 
 class LISTS(db.Model):
     __tablename__ = 'LISTS'
-    CODE = db.Column(db.String(50),primary_key=True)
+    CODE = db.Column(db.String(8),primary_key=True)
     NAME = db.Column(db.String(50))
 
 class TMP_FAILED(db.Model):
@@ -39,4 +39,4 @@ class RELATION(db.Model):
     CODE = db.Column(db.String(50),primary_key=True)
     FLAG = db.Column(db.String(50))
     REMARK = db.Column(db.String(50))
-    FAVORITE_TIME = db.Column(db.DateTime) #采集时间
+    FAVORITE_TIME = db.Column(db.DateTime) #收藏时间
