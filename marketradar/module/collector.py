@@ -105,7 +105,7 @@ def __collect_One(code,name,sday,eday,*args):
             dbpool.executeUpdate(data_sqls)
     except Exception as e:
         logger.exception("采集股票[%s-%s]交易数据时出错 >> " % (code, name))
-        logger.exception(e)
+        #logger.exception(e)
         __failed_one(code, name)
     finally:
         if args and isinstance(args[0],ThreadPool): #如果第一个参数是线程池，则执行添加新线程操作
