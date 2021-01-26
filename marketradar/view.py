@@ -236,6 +236,23 @@ def _4001():
         return render_template('result.html',matchs = match_ls)
     return render_template('4001.html')
 
+
+#[3004-回落到均线附近时]
+@app.route('/3004',methods=['GET','POST'])
+def _3004():
+    if request.values.get('action') == 'query':
+        match_ls = []
+        ma = int(request.values.get('ma')) #样本天数
+        ls = LISTS.query.all()  # 统计所有股票个数
+
+        tp = ThreadPool(10)  # 30个线程处理
+        for stock in ls:
+            thread = tp.get_thread()
+            t = thread(target=filter_rule_3004, args=(stock, ma, match_ls, (tp)))
+            t.start()
+        return render_template('result.html',matchs = match_ls)
+
+    return render_template('3004.html')
 #============================================================其他功能=================================================================
 
 #[加入/移出收藏夹]

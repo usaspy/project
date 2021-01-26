@@ -288,6 +288,26 @@ def rule_2006(df, optionsRadios):
             return True
     return False
 
+#[回落到均线附近]
+def rule_3004(df, ma):
+    if df.iloc[:, 0].size != 3:
+        return False
+
+    k0 = df.iloc[0]  # 今日
+    k1 = df.iloc[1]  # 昨日
+    k2 = df.iloc[2]  # 前日
+
+    if  k0.LOW < k1.LOW < k2.LOW :   #过去三日每日最低价逐日下跌
+        if ma == 5:
+            if abs(k0.LOW - k0.MA5)/ k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA5 : #今日最低价落在MA5附近且今日收盘价高于MA5
+                return True
+        if ma == 10:
+            if abs(k0.LOW - k0.MA10) / k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA10 :
+                return True
+        if ma == 20:
+            if abs(k0.LOW - k0.MA20)/ k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA20 :
+                return True
+    return False
 
 #[底部选股]
 def rule_4001(df, optionsRadios):

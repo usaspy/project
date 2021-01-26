@@ -1,0 +1,43 @@
+	{% extends "_refer_.html" %}
+	{% block body %}
+	<div id="page-container" class=" page-without-sidebar">
+		<!-- begin #content -->
+			<!-- begin page-header -->
+			<h1 class="page-header">回落到均线附近 / Code=3004 <small></small></h1>
+			<!-- end page-header -->
+
+			<div class="panel panel-inverse">
+			    <div class="panel-body">
+					<div class="col-md-5">
+						<div class="alert alert-info fade in">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 回落到均线？</h4>
+								<p>
+									当股价回落到5日、10日、20日均线附近时。
+									<br>
+								</p>
+						</div>
+						<form class="form-horizontal" id="kline_form" method = "POST" action="/3004?action=query" target="result_page">
+							日均线
+											<select class="form-control" name="ma">
+												<option selected value="5">MA5</option>
+												<option  value="10">MA10</option>
+												<option  value="20">MA20</option>
+											</select>
+							<br/>
+							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
+						</form>
+					</div>
+					<div class="col-md-7">
+						<h3 class="page-header">匹配结果</h3>
+
+						<iframe name="result_page" align="center" width="100%" height="450" src="" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+					</div>
+			    </div>
+			</div>
+		</div>
+		<!-- end #content -->
+
+	{% endblock %}
