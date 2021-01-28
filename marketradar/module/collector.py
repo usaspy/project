@@ -51,7 +51,7 @@ def generate_today(day):
     lists = dbpool.executeQuery("select CODE,NAME from LISTS")
     for i in lists:
         thread = tp.get_thread()
-        t = thread(target=__collect_One,args=(i[0],i[1],day,day,(tp)))
+        t = thread(target=__collect_Two,args=(i[0],i[1],day,day,(tp)))
         t.start()
 
 # 采集失败的代码执行重采，直到所有都采集成功结束
@@ -65,7 +65,7 @@ def generate_today_remain(day):
         logger.info("有%s个股票需要重采"% len(lists))
         for i in lists:
             thread = tp.get_thread()
-            t = thread(target=__collect_One, args=(i[0], i[1], day, day, (tp)))
+            t = thread(target=__collect_Two, args=(i[0], i[1], day, day, (tp)))
             t.start()
 
 #采集指定交易日的股票交易数据
@@ -133,7 +133,7 @@ def __collect_Two(code,name,sday,eday,*args):
             data_sqls.append(
                 "insert into DAY_DATAS(CODE,NAME,TOPEN,HIGH,LOW,TCLOSE,LCLOSE,CHG,PCHG,VOTURNOVER,TURNOVER,VATURNOVER,TCAP,MCAP,DAY,CREATE_TIME) VALUES"
                 "('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',now())" %
-                (code, name, ls[1], ls[6], ls[5], ls[2], 0, ls[3], ls[4], ls[7], ls[9], ls[8], 0, 0, ls[0]))
+                (code, name, ls[1], ls[6], ls[5], ls[2], 0, ls[3], ls[4], int(ls[7])*100, ls[9], float(ls[8])*10000, 0, 0, ls[0]))
 
             dbpool.executeUpdate(data_sqls)
     except Exception as e:
