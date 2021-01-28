@@ -237,6 +237,25 @@ def _4001():
     return render_template('4001.html')
 
 
+#[3003-一阳穿多线]
+@app.route('/3003',methods=['GET','POST'])
+def _3003():
+    if request.values.get('action') == 'query':
+        match_ls = []
+        day = request.values.getlist('optionsRadios') #occurtime
+
+        ls = LISTS.query.all()  # 统计所有股票个数
+
+        tp = ThreadPool(10)  # 30个线程处理
+        for stock in ls:
+            thread = tp.get_thread()
+            t = thread(target=filter_rule_3003, args=(stock, day, match_ls, (tp)))
+            t.start()
+        return render_template('result.html',matchs = match_ls)
+
+    return render_template('3003.html')
+
+
 #[3004-回落到均线附近时]
 @app.route('/3004',methods=['GET','POST'])
 def _3004():

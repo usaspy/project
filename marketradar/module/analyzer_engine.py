@@ -288,6 +288,29 @@ def rule_2006(df, optionsRadios):
             return True
     return False
 
+#[一阳穿多线]
+def rule_3003(df, day):
+    if df.iloc[:, 0].size != 3:
+        return False
+
+    k0 = df.iloc[0]  # 今日
+    k1 = df.iloc[1]  # 昨日
+    k2 = df.iloc[2]  # 前日
+
+    if 'today' in day:
+        if k0.TCLOSE > k0.TOPEN:
+            if k0.TCLOSE > k0.MA5 and k0.TCLOSE > k0.MA10 and k0.TCLOSE > k0.MA20:
+                if k0.TOPEN < k0.MA5 and k0.TOPEN < k0.MA10 and k0.TOPEN < k0.MA20:
+                    return True
+
+    if 'yesterday' in day:
+        if k1.TCLOSE > k1.TOPEN:
+            if k1.TCLOSE > k1.MA5 and k1.TCLOSE > k1.MA10 and k1.TCLOSE > k1.MA20:
+                if k1.TOPEN < k1.MA5 and k1.TOPEN < k1.MA10 and k1.TOPEN < k1.MA20:
+                    return True
+
+    return False
+
 #[回落到均线附近]
 def rule_3004(df, ma):
     if df.iloc[:, 0].size != 3:

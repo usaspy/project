@@ -172,6 +172,19 @@ def filter_rule_3004(stock, ma, match_ls,*args):
         if args and isinstance(args[0], ThreadPool):  # 如果第一个参数是线程池，则执行添加新线程操作
             args[0].add_thread()
 
+#一阳穿多线
+def filter_rule_3003(stock, day, match_ls,*args):
+    try:
+        df = __getData(stock.CODE,3)
+        if analyzer_engine.rule_3003(df,day):
+            match_ls.append(stock)
+        return False
+    except Exception as e:
+        logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))
+        logger.exception(e)
+    finally:
+        if args and isinstance(args[0], ThreadPool):  # 如果第一个参数是线程池，则执行添加新线程操作
+            args[0].add_thread()
 
 #底部选股
 def filter_rule_4001(stock, optionsRadios, match_ls,*args):
