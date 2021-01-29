@@ -219,24 +219,6 @@ def _2006():
     return render_template('2006.html')
 
 
-#[4001-底部选股]
-@app.route('/4001',methods=['GET','POST'])
-def _4001():
-    if request.values.get('action') == 'query':
-        match_ls = []
-        optionsRadios = int(request.values.get('optionsRadios')) # 样本天数
-
-        ls = LISTS.query.all()  # 统计所有股票个数
-
-        tp = ThreadPool(10)  # 30个线程处理
-        for stock in ls:
-            thread = tp.get_thread()
-            t = thread(target=filter_rule_4001, args=(stock,optionsRadios, match_ls, (tp)))
-            t.start()
-        return render_template('result.html',matchs = match_ls)
-    return render_template('4001.html')
-
-
 #[3003-一阳穿多线]
 @app.route('/3003',methods=['GET','POST'])
 def _3003():
@@ -272,6 +254,25 @@ def _3004():
         return render_template('result.html',matchs = match_ls)
 
     return render_template('3004.html')
+
+
+#[4001-底部选股]
+@app.route('/4001',methods=['GET','POST'])
+def _4001():
+    if request.values.get('action') == 'query':
+        match_ls = []
+        optionsRadios = int(request.values.get('optionsRadios')) # 样本天数
+
+        ls = LISTS.query.all()  # 统计所有股票个数
+
+        tp = ThreadPool(10)  # 30个线程处理
+        for stock in ls:
+            thread = tp.get_thread()
+            t = thread(target=filter_rule_4001, args=(stock,optionsRadios, match_ls, (tp)))
+            t.start()
+        return render_template('result.html',matchs = match_ls)
+    return render_template('4001.html')
+
 #============================================================其他功能=================================================================
 
 #[加入/移出收藏夹]
