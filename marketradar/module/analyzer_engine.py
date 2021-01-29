@@ -320,7 +320,7 @@ def rule_3004(df, ma):
     k1 = df.iloc[1]  # 昨日
     k2 = df.iloc[2]  # 前日
 
-    if  k0.LOW <= k1.LOW <= k2.LOW :   #过去三日每日最低价逐日下跌
+    if  k0.LOW <= k1.LOW and k0.LOW <= k2.LOW :   #过去三日每日最低价逐日下跌
         if ma == 5:
             if abs(k0.LOW - k0.MA5)/ k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA5 : #今日最低价落在MA5附近且今日收盘价高于MA5
                 return True
@@ -332,16 +332,16 @@ def rule_3004(df, ma):
                 return True
     return False
 
-#[底部选股]
-def rule_4001(df, optionsRadios):
-    if df.iloc[:, 0].size != optionsRadios:
+#[历史底部]
+def rule_4001(df, ybts):
+    if df.iloc[:, 0].size != ybts:
         return False
 
-    LOWS = np.array(df.iloc[0:optionsRadios-1].LOW)
+    LOWS = np.array(df.iloc[0:ybts-1].LOW)
 
     min = LOWS.min()
 
-    if df.iloc[0].LOW > min and (df.iloc[0].LOW - min) / min < 0.03:
+    if df.iloc[0].LOW == min or (df.iloc[0].LOW - min) / min < 0.03:
         return True
     return False
 

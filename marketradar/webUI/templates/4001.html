@@ -3,7 +3,7 @@
 	<div id="page-container" class=" page-without-sidebar">
 		<!-- begin #content -->
 			<!-- begin page-header -->
-			<h1 class="page-header">底部选股 / Code=4001 <small></small></h1>
+			<h1 class="page-header">历史低位 / Code=4001 <small></small></h1>
 			<!-- end page-header -->
 
 			<div class="panel panel-inverse">
@@ -13,28 +13,30 @@
                             <button type="button" class="close" data-dismiss="alert">
                                 <span aria-hidden="true">×</span>
                             </button>
-                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是底部选股？</h4>
-							说白了，就是股票处于历史底部了，是否合适还要结合其他经验分析
+                            	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是历史低位？</h4>
+							说白了，就是股票处于历史底部了(在样本天数内得最低价)，抓反弹时作为参考
 				<div class="slide_div">
 				<br>
 
 				<strong>提示:</strong> <br>
 					1) 找出30天内、60天内、90天内的底部，看看今天的价格在什么位置<br>
-					2) 今天的最低价接近历史低位(+3%以内)<br>
+					2) 今天的最低价已经接近历史低位<br>
 				 </div>
 						</div>
+						股价屡创新低，目前已经处于：
 						 <form class="form-horizontal" id="kline_form" method = "POST" action="/4001?action=query" target="result_page">
-							<input type="radio" name="optionsRadios" value="30" checked>30天底部
-							 <input type="radio" name="optionsRadios" value="60" >60天底部
-							 <input type="radio" name="optionsRadios" value="90" >90天底部
-							 <input type="radio" name="optionsRadios" value="120" >120天底部
+							 <input type="radio" name="ybts" value="20" checked>20天
+							 <input type="radio" name="ybts" value="60" >60天
+							 <input type="radio" name="ybts" value="90" >90天
+							 <input type="radio" name="ybts" value="120" >120天
 							<br>
+							 的底部区间(不高于3%以内)
+							 <br>
 							<button type="submit" class="btn btn-danger m-r-5 m-b-5">开始匹配</button>
 						 </form>
 					</div>
 					<div class="col-md-7">
 						<h3 class="page-header">匹配结果</h3>
-
 						<iframe name="result_page" align="center" width="100%" height="450" src="" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 					</div>
 			    </div>

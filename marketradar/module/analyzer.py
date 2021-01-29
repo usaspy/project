@@ -186,18 +186,11 @@ def filter_rule_3003(stock, day, match_ls,*args):
         if args and isinstance(args[0], ThreadPool):  # 如果第一个参数是线程池，则执行添加新线程操作
             args[0].add_thread()
 
-#底部选股
-def filter_rule_4001(stock, optionsRadios, match_ls,*args):
+#历史大底
+def filter_rule_4001(stock, ybts, match_ls,*args):
     try:
-        if optionsRadios == 30:
-            df = __getData(stock.CODE,30)
-        if optionsRadios == 60:
-            df = __getData(stock.CODE,60)
-        if optionsRadios == 90:
-            df = __getData(stock.CODE,90)
-        if optionsRadios == 120:
-            df = __getData(stock.CODE,120)
-        if analyzer_engine.rule_4001(df,optionsRadios):
+        df = __getData(stock.CODE,ybts)
+        if analyzer_engine.rule_4001(df,ybts):
             match_ls.append(stock)
         return False
     except Exception as e:
