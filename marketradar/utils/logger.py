@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 formatter = logging.Formatter('%(asctime)s [%(levelname)-8s]: %(message)s')
 
 # 文件日志
-file_handler = logging.FileHandler("d:\zh.log")
+file_handler = logging.FileHandler("d:\marketradar.log")
 file_handler.setFormatter(formatter)
 # 控制台日志
 console_handler = logging.StreamHandler(sys.stdout)
