@@ -253,7 +253,7 @@ def _3004():
             t.start()
         return render_template('result.html',matchs = match_ls)
 
-    return render_template('4001.html')
+    return render_template('3004.html')
 
 
 #[4001-历史低位]
