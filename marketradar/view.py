@@ -72,13 +72,12 @@ def _1002():
     if request.values.get('action') == 'query':
         match_ls = []
         multiple = int(request.values.get('multiple')) #默认放量倍数
-        fdts = int(request.values.get('fdts')) #放量天数
         ls = LISTS.query.all() #统计所有股票个数
 
         tp = ThreadPool(10)  #30个线程处理
         for stock in ls:
             thread = tp.get_thread()
-            t = thread(target=filter_rule_1002, args=(stock, fdts, multiple, match_ls,(tp)))
+            t = thread(target=filter_rule_1002, args=(stock, multiple, match_ls,(tp)))
             t.start()
         return render_template('result.html',matchs = match_ls)
 
@@ -91,13 +90,13 @@ def _1003():
         match_ls = []
         slts = int(request.values.get('_slts')) #缩量天数
         multiple = int(request.values.get('multiple')) #放大倍数
-        changehand = float(request.values.get('_changehand'))
+        turnover = float(request.values.get('turnover'))
         ls = LISTS.query.all()  # 统计所有股票个数
 
         tp = ThreadPool(10)  # 30个线程处理
         for stock in ls:
             thread = tp.get_thread()
-            t = thread(target=filter_rule_1003, args=(stock, slts,multiple,changehand, match_ls, (tp)))
+            t = thread(target=filter_rule_1003, args=(stock, slts,multiple,turnover, match_ls, (tp)))
             t.start()
         return render_template('result.html',matchs = match_ls)
 
