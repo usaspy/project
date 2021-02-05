@@ -16,20 +16,18 @@ def rule_1001(df, tag, ybts):
 
     vol_series = df["VOTURNOVER"]  #成交量 列表
     pchg_series = df["PCHG"]  #涨幅 列表
+    turnover_series = df["TURNOVER"]  #换手率 列表
 
     if tag == "A":
         #step.1
         for i in range(0,ybts):
-            if (vol_series[i] / vol_series[i+1] < 1.0) or (vol_series[i] / vol_series[i+1] > 1.7):#如果最近几天成交量没有持续温和放大，则不满足条件，返回False
+            if (vol_series[i] / vol_series[i+1] < 1.0) or (vol_series[i] / vol_series[i+1] > 1.5):#如果最近几天不是温和放量，则不满足条件，返回False
                 return False
         # step.2
         for i in range(0, ybts):
-            if pchg_series[i] <= 0:  # 如果最近几天价格涨幅没有持续为正，则不满足条件，返回False
+            if pchg_series[i] < 0 or pchg_series[i] > 3.0:  # 如果最近几天股价不是稳步上涨或涨幅过大，则不满足条件，返回False
                 return False
-        # step.3
-        for i in range(0, ybts):
-            if pchg_series[i] > 3.0:  # 涨幅过大
-                return False
+
     if tag == "B":
         # step.1
         for i in range(0, ybts):
@@ -39,50 +37,52 @@ def rule_1001(df, tag, ybts):
         for i in range(0, ybts):
             if pchg_series[i] > 0:  # 如果最近几天价格涨幅没有持续为负，则不满足条件，返回False
                 return False
+        # step.3
+        for i in range(0, ybts):
+            if turnover_series[i] > 1.2:  # 换手率不能超过1.2%
+                return False
 
     return True
 
 #[突放巨量]
 #规则：
-#1.确定fdts放大天数
-#2.放大天数内每日成交量至少是放大前一日的multiple=7倍
-def rule_1002(df, fdts, multiple):
-    if df.iloc[:,0].size != (fdts + 1):
+#2.今天的成交量是过去4天成交量的N倍
+def rule_1002(df, multiple):
+    if df.iloc[:,0].size != (5):
         return False
 
     series = df["VOTURNOVER"]
     #step.2
-    for i in range(0,fdts):
-        if series[i]/series[fdts] < multiple:#放大天数内的每一天成交量都是巨量
+    for i in range(0,4):
+        if series[0]/series[i+1] < multiple:#放大天数内的每一天成交量都是巨量
             return False
     return True
 
 #[持续缩量后首次放量]
 #规则：
 
-#1.至少有slts天的换手率不高于2%
+#1.至少有slts天的换手率不高于1%
 #2.今日的成交量是前10天成交均量的multiple=2倍以上
 #3.今日的成交量是昨日的3倍以上，且今天收盘价是上涨的
-def rule_1003(df, slts, multiple,changehand):
+def rule_1003(df, slts, multiple,turnover):
     if df.iloc[:,0].size != 20:
         return False
 
-    series = df["VOTURNOVER"]
-    pchg_series = df["PCHG"]  #涨幅 列表
-    #step.3
-    if series[0]/series[1] < 3:
+    vot_series = df["VOTURNOVER"] #成交量
+    pchg_series = df["PCHG"]  #涨幅
+    #step.1
+    if vot_series[0]/vot_series[1] < multiple:
         return False
     if pchg_series[0] <= 0:
         return False
     #step.2
-    avg_vol = series[1:11].sum()/10
-    if series[0]/avg_vol < multiple:
+    avg_vol = vot_series[1:11].sum()/10
+    if vot_series[0]/avg_vol < multiple:
         return False
-    #step.1
+    #step.3   过去20日内的缩量天数至少有N天
     count = 0
     for i in range(1,20):
-        _changehand = df.iloc[i].TURNOVER
-        if  _changehand <= changehand:  #当日换手率不超过2%
+        if df.iloc[i].TURNOVER <= turnover:  #当日换手率不超过1%
             count += 1
     if count < slts:
         return False

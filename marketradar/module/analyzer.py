@@ -48,10 +48,10 @@ def filter_rule_1001(stock,tag,ybts,match_ls,*args):
             args[0].add_thread()
 
 #突放巨量
-def filter_rule_1002(stock,fdts,multiple,match_ls,*args):
+def filter_rule_1002(stock,multiple,match_ls,*args):
     try:
-        df = __getData(stock.CODE, int(fdts+1))
-        if analyzer_engine.rule_1002(df, fdts, multiple):
+        df = __getData(stock.CODE, int(5))
+        if analyzer_engine.rule_1002(df, multiple):
             match_ls.append(stock)
     except Exception as e:
         logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))
@@ -61,10 +61,10 @@ def filter_rule_1002(stock,fdts,multiple,match_ls,*args):
             args[0].add_thread()
 
 #持续缩量后的首次放量
-def filter_rule_1003(stock,slts,multiple,changehand,match_ls,*args):
+def filter_rule_1003(stock,slts,multiple,turnover,match_ls,*args):
     try:
         df = __getData(stock.CODE, 20)
-        if analyzer_engine.rule_1003(df, slts,multiple,changehand):
+        if analyzer_engine.rule_1003(df, slts,multiple,turnover):
             match_ls.append(stock)
     except Exception as e:
         logger.exception("对股票[%s-%s]数据进行分析时出错 >> " % (stock.CODE, stock.NAME))
