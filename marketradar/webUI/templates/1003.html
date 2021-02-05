@@ -15,7 +15,7 @@
                             </button>
                             	<h4><i class="fa fa-2x fa-info-circle"></i> 什么是连续缩量后的首次放量拉升——极限缩量？</h4>
 								<p>
-									此前成交量持续低迷，至少X个交易日的每日换手率不超过2%，今日突然开始放量上涨。并且今日成交量是之前10天交易均量的至少<font color="red" size="4">2</font>倍，涨幅不低于1%
+									此前成交量持续低迷，至少X个交易日的每日换手率不超过1%，今日突然开始放量上涨。并且今日成交量是之前10天交易均量的至少<font color="red" size="4">2</font>倍，涨幅不低于1%
 								</p>
 						</div>
 						<form class="form-horizontal" id="kline_form" method = "POST" action="/1003?action=query" target="result_page">
@@ -25,10 +25,9 @@
 												<option selected value="15">15天</option>
 											</select>
 							天的换手率不超过
-											<select class="form-control" name="_changehand">
+											<select class="form-control" name="turnover">
 												<option selected value="1">1%</option>
 												<option  value="1.5">1.5%</option>
-												<option  value="2">2%</option>
 											</select>
 							<br/>
 							今日成交量较前期放大倍数：	<input type="text" name="multiple" class="form-control" value="3">
