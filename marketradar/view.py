@@ -40,7 +40,7 @@ def sync():
     if request.values.get('action') == '_cal_':
         dayString = request.values.get("day")
         collector.generate_ma(datetimeUtil.dateFormat2Format(dayString,'%m/%d/%Y','%Y-%m-%d'))
-        collector.cal_CHANGEHAND(datetimeUtil.dateFormat2Format(dayString,'%m/%d/%Y','%Y-%m-%d'))
+        #collector.cal_CHANGEHAND(datetimeUtil.dateFormat2Format(dayString,'%m/%d/%Y','%Y-%m-%d'))
         msg = "股票移动平均线MA5、MA10、MA20、当日换手率计算完成！"
 
     ls = LISTS.query.all()  #统计所有股票个数
