@@ -10,7 +10,7 @@ from marketradar.config import conf
 #
 
 #默认连接数 5  关闭事务，需手动提交
-dbpool = PooledDB(MySQLdb,5,host=conf.get('MYSQL','host'),user=conf.get('MYSQL','user'),
+dbpool = PooledDB(MySQLdb,15,host=conf.get('MYSQL','host'),user=conf.get('MYSQL','user'),
                   passwd=conf.get('MYSQL','password'),db=conf.get('MYSQL','dbName'),
                   port=conf.getint('MYSQL','port'),charset='gbk',setsession=['SET AUTOCOMMIT = 0'])
 
