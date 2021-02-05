@@ -301,13 +301,16 @@ def rule_3003(df, day):
         if k0.TCLOSE > k0.TOPEN:  #收盘价高于开盘价
             if k0.TCLOSE > k0.MA5 and k0.TCLOSE > k0.MA10 and k0.TCLOSE > k0.MA20: #收盘价高于MA5\10\20
                 if k0.TOPEN < k0.MA5 and k0.TOPEN < k0.MA10 and k0.TOPEN < k0.MA20: #开盘价低于MA5\10\20
-                    return True
+                    if k0.VOTURNOVER > k1.VOTURNOVER * 1.5:  #成交量放大
+                        return True
 
     if 'yesterday' in day:
         if k1.TCLOSE > k1.TOPEN:
             if k1.TCLOSE > k1.MA5 and k1.TCLOSE > k1.MA10 and k1.TCLOSE > k1.MA20:
                 if k1.TOPEN < k1.MA5 and k1.TOPEN < k1.MA10 and k1.TOPEN < k1.MA20:
-                    return True
+                    if k1.VOTURNOVER > k2.VOTURNOVER * 1.5:  # 成交量放大
+                        if k0.TCLOSE > k0.MA5 and k0.TCLOSE > k0.MA10 and k0.TCLOSE > k0.MA20:  #今日的成交量收在三根均线上方
+                            return True
 
     return False
 
