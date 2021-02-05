@@ -81,7 +81,7 @@ def rule_1003(df, slts, multiple,changehand):
     #step.1
     count = 0
     for i in range(1,20):
-        _changehand = df.iloc[i].CHANGEHAND
+        _changehand = df.iloc[i].TURNOVER
         if  _changehand <= changehand:  #当日换手率不超过2%
             count += 1
     if count < slts:
@@ -97,7 +97,7 @@ def rule_1004(df, ybts, changehand):
     if df.iloc[:,0].size != ybts:
         return False
 
-    series = df["CHANGEHAND"]
+    series = df["TURNOVER"]
     #step.2
     if series[0:ybts].sum() < changehand:
         return False
