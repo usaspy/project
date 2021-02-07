@@ -181,7 +181,7 @@ def rule_2003(df, tag, no_head):
                 return False
 
         # 5天内是否持续下跌
-        if __is_continue_fall(df[0:]) != True:
+        if __is_falling(df[0:]) != True:
             return False
 
         # 必须是光头阳线
@@ -203,7 +203,7 @@ def rule_2003(df, tag, no_head):
             if (k.HIGH - k.LOW) / (k.TCLOSE - k.LOW + 0.00001) > 1.5:
                 return False
         # 5-1天内是否持续下跌
-        if __is_continue_fall(df[1:]) != True:
+        if __is_falling(df[1:]) != True:
             return False
         # 必须是光头阳线
         if no_head == 'yes':
@@ -237,7 +237,7 @@ def rule_2004(df, ybts):
     if k2.VOTURNOVER < k1.VOTURNOVER * 1.5: #成交量放大低于1.5倍
         return False
     #1
-    if __is_continue_fall(df[1:]) != True:
+    if __is_falling(df[1:]) != True:
         return False
 
     return __kztmxt(k1,k2)
@@ -350,7 +350,7 @@ def rule_4001(df, ybts):
 
 
 # 检查是否持续下跌
-def __is_continue_fall(df):
+def __is_falling(df):
     LOWS = np.array(df['LOW'])
     if LOWS.min() != df.iloc[0].LOW:  #完美的持续下跌形态中，最近一日LOW值应为最低值
         return False
