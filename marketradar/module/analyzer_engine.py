@@ -255,8 +255,8 @@ def rule_2005(df, optionsRadios):
         if k2.LOW > k1.HIGH:
             return True
     if optionsRadios == '_B':
-        for i in range(0, 20-1):
-            if df.iloc[i].LOW > df.iloc[i+1].HIGH and i > 0:  #找到向上跳空缺口，并且不是今日缺口
+        for i in range(1, 20-1): #过去18天 最后一天不往下对比
+            if df.iloc[i].LOW > df.iloc[i+1].HIGH :  #找到向上跳空缺口，并且不是今日缺口
                 LOWS = np.array(df.iloc[0:i].LOW)
                 #print(df.iloc[0].CODE)
                 #print(df.iloc[i].DAY)
