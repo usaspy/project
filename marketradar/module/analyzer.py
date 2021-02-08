@@ -147,7 +147,7 @@ def filter_rule_2005(stock, optionsRadios, match_ls,*args):
 #上行三法
 def filter_rule_2006(stock, optionsRadios, match_ls,*args):
     try:
-        df = __getData(stock.CODE,4)
+        df = __getData(stock.CODE,5)
         if analyzer_engine.rule_2006(df,optionsRadios):
             match_ls.append(stock)
         return False
