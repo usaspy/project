@@ -276,16 +276,17 @@ def rule_2006(df, optionsRadios):
     if df.iloc[:, 0].size != 5:
         return False
 
-    k = df.iloc[4]
-    if (k.TCLOSE - k.TOPEN)/k.TOPEN > 0.04:
-        for i in range(1, 4):
-            if df.iloc[i].TCLOSE > k.LOW and df.iloc[i].TCLOSE < k.HIGH and df.iloc[i].TOPEN > k.LOW and df.iloc[i].TOPEN < k.HIGH:
-                continue
-            else:
-                return False
-        k5 = df.iloc[0]
-        if k5.PCHG > 2:   #第五天是个上涨日，（最好是开盘高，收盘涨幅大）
-            return True
+    for i in range(2,5):
+        k = df.iloc[i]
+        if k.PCHG > 4: #在过去10日内的某一日涨幅超过4个点,后面至少两日都是缩量调整
+            if df.iloc[i-1].TCLOSE > k.LOW and df.iloc[i-1].TCLOSE < k.HIGH: #第二日出现下跌
+                if df.iloc[i-2].TCLOSE < df.iloc[i-1].TCLOSE and df.iloc[i-2].LOW < df.iloc[i-1].LOW and df.iloc[i-2].LOW > k.TOPEN: #第三日继续下跌 但是最低价也不低于某日的开盘价
+                    if optionsRadios == 'yes': #之后又出现一跟大阳线并且突破前期大阳线的收盘价
+                        if max(df.iloc[0:i-1].TCLOSE) > k.TCLOSE:
+                            return True
+                        else:
+                            return False
+                    return True
     return False
 
 #[一阳穿多线]
@@ -324,15 +325,17 @@ def rule_3004(df, ma):
     k2 = df.iloc[2]  # 前日
 
     if  k0.LOW <= k1.LOW and k0.LOW <= k2.LOW :   #过去三日每日最低价逐日下跌
-        if ma == 5:
-            if abs(k0.LOW - k0.MA5)/ k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA5 : #今日最低价落在MA5附近且今日收盘价高于MA5
-                return True
-        if ma == 10:
-            if abs(k0.LOW - k0.MA10) / k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA10 :
-                return True
-        if ma == 20:
-            if abs(k0.LOW - k0.MA20)/ k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA20 :
-                return True
+        s = k0.TCLOSE if k0.TCLOSE < k0.TOPEN else k0.TOPEN
+        if (s - k0.LOW)/ k0.TCLOSE > 0.01:  #测量下影线的长度，要有明显的企稳痕迹(长下影线) 下影线长度超过1个点
+            if ma == 5:
+                if abs(k0.LOW - k0.MA5)/ k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA5 : #今日最低价落在MA5附近且今日收盘价高于MA5
+                    return True
+            if ma == 10:
+                if abs(k0.LOW - k0.MA10) / k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA10 :
+                    return True
+            if ma == 20:
+                if abs(k0.LOW - k0.MA20)/ k0.TCLOSE < 0.003 and k0.TCLOSE > k0.MA20 :
+                    return True
     return False
 
 #[历史底部]
@@ -344,7 +347,7 @@ def rule_4001(df, ybts):
 
     min = LOWS.min()
 
-    if df.iloc[0].LOW == min or (df.iloc[0].LOW - min) / min < 0.03:
+    if (df.iloc[0].LOW - min) / min < 0.03:
         return True
     return False
 
