@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../AutoCar/.idea/AutoCar.iml" filepath="$PROJECT_DIR$/../AutoCar/.idea/AutoCar.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/MarketRadar.iml" filepath="$PROJECT_DIR$/.idea/MarketRadar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../XiaoFei/.idea/XiaoFei.iml" filepath="$PROJECT_DIR$/../XiaoFei/.idea/XiaoFei.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../XiaoLu/.idea/XiaoLu.iml" filepath="$PROJECT_DIR$/../XiaoLu/.idea/XiaoLu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../XiaoYi/.idea/XiaoYi.iml" filepath="$PROJECT_DIR$/../XiaoYi/.idea/XiaoYi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../XiaoYi/.idea/XiaoYi.iml" filepath="$PROJECT_DIR$/../XiaoYi/.idea/XiaoYi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../example/.idea/example.iml" filepath="$PROJECT_DIR$/../example/.idea/example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../faceplus/.idea/faceplus.iml" filepath="$PROJECT_DIR$/../faceplus/.idea/faceplus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../xxqx_zt/.idea/xxqx_zt.iml" filepath="$PROJECT_DIR$/../xxqx_zt/.idea/xxqx_zt.iml" />
     </modules>
   </component>
 </project>
